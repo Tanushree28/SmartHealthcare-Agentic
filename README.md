@@ -1,1 +1,1 @@
-# SmartHealtcare
+# SmartHealthcare-Agentic
