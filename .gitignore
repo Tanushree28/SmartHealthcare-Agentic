@@ -4,7 +4,6 @@
 # (see PLAN.md: $SMART_HEALTH_DATA), but these are belt-and-braces.
 # ---------------------------------------------------------------
 data/
-data.nosync/
 *.dat            # WFDB signal files
 *.hea            # WFDB header files
 *.atr            # WFDB beat annotations

@@ -1,8 +1,12 @@
 # PLAN.md — Smart Healthcare: Agentic Cardiac AI
 
-Status: **PLAN ONLY. No implementation has begun.**
-Source of requirements: `Database use.docx.pdf` (10 pages, in this folder).
-Date: 2026-08-22
+Status: **Phase 0 + Phase 1 IMPLEMENTED and verified (2026-08-26).**
+Phases 2–4 remain plan-only and unapproved.
+See [IMPLEMENTATION.md](IMPLEMENTATION.md) for what was actually done, the
+deviations from this document, and the real test output.
+
+Source of requirements: `Database use.docx.pdf` (10 pages, in the repository root).
+Date: 2026-08-22 (plan) / 2026-08-26 (Phase 0+1 executed)
 
 ---
 
@@ -21,8 +25,8 @@ Phase 0 + Phase 1 only.
 
 | Phase | Content | Status in this plan |
 |-------|---------|---------------------|
-| **0** | Environment + data acquisition on macOS | Proposed for approval |
-| **1** | MIT-BIH preprocessing pipeline (PDF §2) | Proposed for approval |
+| **0** | Environment + data acquisition on macOS | **Done** (2026-08-26) |
+| **1** | MIT-BIH preprocessing pipeline (PDF §2) | **Done** (2026-08-26) |
 | 2 | MIMIC-III preprocessing (PDF §3) | Planned, **not** approved |
 | 3 | Waveform/signal-quality layer (PDF §4) | Planned, **not** approved |
 | 4 | Fusion + agentic decision layer (PDF §5) | Planned, **not** approved |
@@ -36,8 +40,8 @@ starting there would block on paperwork.
 
 1. A documented, repeatable environment setup on this machine that does not disturb the
    existing `base` / `fairml312` conda environments.
-2. MIT-BIH Arrhythmia Database v1.0.0 present on local disk **outside iCloud-synced
-   folders**, with an integrity check.
+2. MIT-BIH Arrhythmia Database v1.0.0 present on local disk at a data root **outside the
+   project tree**, with an integrity check.
 3. `python scripts/preprocess_mitbih.py` produces, from the 48 raw records:
    - per-record segmented beat arrays + labels on disk,
    - a manifest CSV (record, beat count, per-class counts, drop reasons),
@@ -73,16 +77,21 @@ Confirmed by inspection of `/Users/tanushreenepal/Desktop/Smart Healthcare`:
 | Package managers | `brew`, `conda` present; `pyenv`, `uv`, `wget` **absent**; `curl`, `git` present |
 | Existing conda envs | `fairml312` |
 | Free disk | ~187 GB on the data volume |
-| **iCloud sync** | **`~/Library/Mobile Documents/com~apple~CloudDocs/Desktop` exists → "Desktop & Documents" iCloud sync is on** |
+| **iCloud sync** | **OFF for this project.** Verified 2026-08-24: `~/Desktop` (inode 3001238) and `~/Library/Mobile Documents/com~apple~CloudDocs/Desktop` (inode 3010667) are *different* directories; the CloudDocs stub holds only `.DS_Store`/`.localized`; no `fileprovider`/`ubiquity` xattrs on any project file. iCloud Drive is enabled account-wide, but Desktop & Documents folder sync is not. |
+| Existing venv | `venv/`, Python **3.13.9**, created from `/opt/anaconda3/bin/python` |
 
 ### Root cause / core problem to solve
 
 Two environment problems must be solved before any preprocessing code can run reliably:
 
-1. **The project lives inside an iCloud-synced folder.** Writing a ~100 MB dataset (and
-   later, multi-GB MIMIC extracts) into `~/Desktop` would push it all to iCloud: slow
-   uploads, possible eviction of files to cloud-only stubs, and file-access stalls in the
-   middle of a training run. Dataset storage must be relocated outside the synced tree.
+1. **Dataset storage needs a home outside the repository.** *(Corrected 2026-08-24: an
+   earlier draft of this plan claimed `~/Desktop` was iCloud-synced. That was inferred from
+   the mere existence of a CloudDocs path and was wrong — see the verification in the table
+   above. The project is on plain local disk and nothing here syncs anywhere.)* The reason
+   to keep data out of the project tree therefore is **not** iCloud: it is that ~100 MB of
+   raw MIT-BIH (and potentially multi-GB MIMIC extracts) should never enter git history,
+   should survive a re-clone, and should be shareable across projects. A separate data root
+   accomplishes all three.
 2. **Python 3.14 is newer than the scientific stack's guaranteed wheel coverage.** Building
    `scipy`/`numpy` from source on 3.14 is slow and failure-prone. A pinned 3.12 environment
    avoids this entirely.
@@ -96,12 +105,13 @@ Neither is a code bug; both are setup decisions that are cheap now and expensive
 After Phase 0 + 1:
 
 ### Environment
-- A dedicated conda environment `smart-health` on **Python 3.12**, isolated from `base`
-  and `fairml312`.
+- The existing `venv/` on **Python 3.13.9** (already created by you at the project root;
+  see Deviation 3 in `IMPLEMENTATION.md`). No new conda environment is created, and `base`
+  and `fairml312` are left untouched.
 - `requirements.txt` pins the direct dependencies actually used.
 
 ### Data location
-- Raw data at `~/physionet-data/mitdb/` — outside iCloud, on local disk.
+- Raw data at `~/physionet-data/mitdb/` — on local disk, outside the project tree.
 - The repo references it through the `SMART_HEALTH_DATA` environment variable, defaulting
   to `~/physionet-data`. No absolute paths hardcoded in source.
 - `data/` inside the repo, if used at all, holds only a symlink and is git-ignored.
@@ -203,18 +213,19 @@ They belong to modelling phases, not preprocessing.
 
 ### Phase 0 — Environment and data acquisition
 
-**Step 0.1 — Create an isolated Python 3.12 environment.**
-`conda create -n smart-health python=3.12`, then `pip install -r requirements.txt` inside
-it. Rationale: conda is already installed and you already work with conda envs
-(`fairml312`), 3.12 has complete wheel coverage for the whole scientific stack on arm64,
-and a named env leaves `base` untouched. *Requires approval (dependency install).*
+**Step 0.1 — Use the existing `venv/` (Python 3.13.9).**
+You already created `venv/` at the project root from the anaconda base interpreter. It is
+used as-is; `pip install -r requirements.txt` runs inside it. Rationale: Python 3.13 has
+full wheel coverage on arm64 for numpy/scipy/pandas/wfdb, so the 3.12 pin this plan
+originally proposed buys nothing. `venv/` is git-ignored. *Requires approval (dependency
+install).*
 
-**Step 0.2 — Decide and create the data root outside iCloud.**
+**Step 0.2 — Create the data root outside the project tree.**
 `~/physionet-data/`, read from `$SMART_HEALTH_DATA` with that default. Rationale: keeps
-large binaries out of iCloud upload and out of any future git history, and keeps the code
-machine-independent. An alternative — a folder named `data.nosync` inside the project —
-also defeats iCloud sync, but leaves the data entangled with the repo; the separate root
-is cleaner.
+large binaries out of any future git history, lets the data survive a re-clone or a move of
+the project folder, and keeps the code machine-independent (no absolute paths in source).
+An in-project `data/` directory would work too and is git-ignored either way — the separate
+root is preferred only so the dataset is not tied to this one checkout.
 
 **Step 0.3 — Download MIT-BIH Arrhythmia Database v1.0.0.**
 `scripts/download_mitbih.py` uses `wfdb.dl_database('mitdb', dl_dir=...)`, which is the
@@ -321,8 +332,8 @@ class-weighted or focal loss usually beats aggressive oversampling supports this
 | Split unit | record | beat — the leakage the PDF explicitly warns about |
 | Imbalance handling | measured and reported | resampled in preprocessing — corrupts evaluation |
 | Output layout | one file per record | one monolithic array — unbounded memory, awkward splits |
-| Data location | outside iCloud | inside project — iCloud upload + eviction problems |
-| Python | pinned 3.12 env | system 3.14 — uncertain scientific wheel coverage |
+| Data location | separate root outside the repo | inside project — couples the dataset to one checkout, risks it entering git history |
+| Python | existing `venv/` on 3.13.9 | system 3.14 — uncertain scientific wheel coverage; a new 3.12 env — no benefit over 3.13 |
 
 ---
 
@@ -371,7 +382,7 @@ risks that would silently produce a plausible-looking but invalid dataset:
 | DS1/DS2 lists recalled incorrectly | Results not comparable to published work | Verify against the reference before committing; otherwise ship only the seeded split |
 | Tests depending on downloaded data | Suite unrunnable offline / on a fresh clone | All tests use synthetic WFDB fixtures written to `tmp_path` |
 | Python 3.14 wheel gaps | Long source builds or hard failure | Pinned 3.12 environment |
-| iCloud syncing the dataset | Upload churn, cloud-eviction stalls mid-run | Data root outside `~/Desktop` |
+| Dataset committed to git | Bloated history, patient data in version control | `.gitignore` excludes all WFDB/array/data patterns; data root sits outside the repo |
 | Silent dependency drift | Irreproducible runs | Pinned `requirements.txt`; recorded in `IMPLEMENTATION.md` |
 
 **Must remain unchanged:** the `base` and `fairml312` conda environments, the system Python,
@@ -620,14 +631,18 @@ that would starve validation.
 
 ---
 
-## Open Questions for You
+## Open Questions — all resolved
 
-1. **Phase 0 + 1 scope** — approve as described, or narrow further?
-2. **Conda env `smart-health` on Python 3.12** — acceptable, or would you rather reuse
-   `fairml312` or use a plain `venv`?
-3. **Data root `~/physionet-data`** — acceptable, or another location (e.g. an external
-   drive)?
-4. **Git** — this folder is not a repository. Should I `git init` so the diff is reviewable?
-   I will not create any remote or push.
-5. **MIMIC-III** — do you want to start the credentialing application now, given it takes
-   days to weeks, or work from the open demo subset in Phase 2?
+1. ~~**Phase 0 + 1 scope**~~ — **Resolved 2026-08-26:** approved as described and
+   implemented in full.
+2. ~~Conda env on Python 3.12~~ — **Resolved 2026-08-24:** using your existing `venv/`
+   on Python 3.13.9. Confirmed harmless: every dependency installed from a wheel.
+3. ~~**Data root `~/physionet-data`**~~ — **Resolved 2026-08-26:** used as proposed;
+   93.9 MB of raw data now lives there.
+4. ~~**Git**~~ — **Resolved:** the folder *is* a repository (remote
+   `github.com/Tanushree28/SmartHealthcare-Agentic`, branch `master`). No `git init`
+   was needed and nothing was committed or pushed.
+5. **MIMIC-III** — **still open, and still yours to decide.** Credentialing takes days
+   to weeks, so if Phase 2 is wanted against the full database the application should
+   start soon. The alternative is the open demo subset. No MIMIC-III work has begun and
+   none will without a separate planning pass.
