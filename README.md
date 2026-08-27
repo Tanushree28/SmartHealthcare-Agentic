@@ -12,6 +12,11 @@ MIMIC-III. Those are later phases — see [PlanDoc/PLAN.md](PlanDoc/PLAN.md).
 > in this repository is clinically validated, diagnostic, or fit for patient
 > care.
 
+**[View the results page &rarr;](https://tanushree28.github.io/SmartHealthcare-Agentic/)**
+&nbsp;&mdash;&nbsp; a visual walkthrough of the pipeline and the baseline results.
+It is generated from the processed data by `python scripts/build_report.py`, so
+its figures always match the pipeline that produced them.
+
 ---
 
 ## Setup
@@ -141,6 +146,72 @@ Per AAMI class (default seeded record-wise split, 31/7/6 records):
 Q collapses from 8,039 to 13 between the two columns because almost every Q beat
 is a paced beat inside records 102/104/107/217, which AAMI excludes from the
 splits. They are still processed and written to disk — excluded is not discarded.
+
+---
+
+## Baseline classifier
+
+A classical baseline, to confirm the preprocessing output is learnable and to
+give any future deep model a floor to beat. See [COMMANDS.md](COMMANDS.md) to run it.
+
+Features follow PDF §2.9: six RR-interval features (derived from the saved
+`r_peaks`, so the raw recordings are never re-read) plus the beat mean-pooled
+from 300 samples to 30. Classifiers are Random Forest and LDA, each wrapped in an
+sklearn `Pipeline` so the scaler cannot see test data even by accident.
+
+**Results on DS2 (49,690 beats), Random Forest on RR + morphology:**
+
+| Class | Support | Recall | Precision |
+|-------|--------:|-------:|----------:|
+| N | 44,196 | 0.904 | 0.959 |
+| S | 1,836 | 0.271 | 0.200 |
+| V | 3,219 | 0.844 | 0.594 |
+| F | 388 | 0.273 | 0.120 |
+| Q | 7 | 0.000 | 0.000 |
+
+Macro recall 0.459. Accuracy 0.872, reported but uninformative.
+
+### On the comparison with published work — read this before quoting it
+
+de Chazal et al. (2004) report V sensitivity 0.803 and S sensitivity 0.760 on
+this same DS1/DS2 split. **That is a reference range, not a like-for-like
+benchmark, and our numbers are not a reproduction of their method.**
+
+No code from that paper exists publicly — it predates code release as a norm —
+so nothing of theirs is integrated here. What we borrowed is the DS1/DS2 record
+lists in [`src/ecg/splits.py`](src/ecg/splits.py), i.e. which 44 patients go on
+which side of the split. Everything else is our own.
+
+The methods differ in ways that matter:
+
+| | de Chazal 2004 | This project |
+|---|---|---|
+| ECG leads | two | **one** |
+| Morphology features | fixed sampling windows around the beat | 300 samples mean-pooled to 30 |
+| RR features | 4 | 6 (two ratio features added) |
+| Classifier | LDA, their configuration | Random Forest |
+
+So our V recall of 0.844 against their 0.803 is **not** evidence of a better
+method. The defensible reading is narrower and is the one this baseline was
+built for: V detection lands in the published range, which indicates the Phase 1
+output carries the signal it should. Anything stronger than that is unsupported.
+
+**Ventricular detection is at parity with published work. Supraventricular is
+not** — and the reason is worth stating plainly, because it is *not* a data
+problem. In the training split, S beats arrive at 0.501 s against 0.845 s for
+normal beats, exactly the premature timing that defines the class, and **a single
+threshold on `pre_rr_ratio` reaches S recall of 0.972 on DS2.** The signal is
+there; this classifier is not exploiting it. The likely cause — 30 morphology
+features drowning out 6 RR features under `max_features='sqrt'` — is recorded in
+[PlanDoc/IMPLEMENTATION.md](PlanDoc/IMPLEMENTATION.md) as the next experiment.
+
+### The leakage tripwire
+
+Phase 1 z-scores beats using statistics fitted on *its* training records. Training
+on a different split than the data was preprocessed for means the test beats were
+scaled with statistics that already saw them. `train_baseline.py` refuses to run
+in that case and names the command that fixes it, rather than trusting anyone to
+remember.
 
 ---
 

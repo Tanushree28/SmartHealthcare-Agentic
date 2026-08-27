@@ -1,0 +1,206 @@
+<div class="pagebar"><div class="in">
+  <a class="repo" href="https://github.com/Tanushree28/SmartHealthcare-Agentic">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.34c-2.23.48-2.7-1.07-2.7-1.07-.36-.93-.89-1.18-.89-1.18-.73-.5.05-.49.05-.49.8.06 1.23.83 1.23.83.72 1.23 1.88.87 2.34.67.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.6 7.6 0 0 1 4 0c1.53-1.03 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.28.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8 8 0 0 0 8 0Z"/></svg>
+    Tanushree28 / SmartHealthcare-Agentic
+  </a>
+  <span class="sp"></span>
+  <button class="tbtn" id="theme-toggle" type="button" aria-live="polite">Theme</button>
+</div></div>
+<div class="wrap">
+
+<header class="top">
+  <span class="eyebrow">Smart Healthcare · Phase 0–1b · 27 Aug 2026</span>
+  <h1>From raw ECG to 109,446 labelled heartbeats</h1>
+  <p class="lede">What the preprocessing pipeline does to the MIT-BIH Arrhythmia Database,
+  and how well a classical baseline learns from what comes out. Every figure on this page is
+  computed from the actual data on disk.</p>
+  <div class="stats">
+    <div class="stat"><span class="v" id="s-records">48</span><span class="k">Records</span></div>
+    <div class="stat"><span class="v" id="s-beats">—</span><span class="k">Beats extracted</span></div>
+    <div class="stat"><span class="v" id="s-unknown">0</span><span class="k">Unmapped symbols</span></div>
+    <div class="stat"><span class="v" id="s-v">—</span><span class="k">Ventricular recall</span></div>
+    <div class="stat"><span class="v">180</span><span class="k">Tests passing</span></div>
+  </div>
+</header>
+
+<section>
+  <div class="sec-head"><span class="stage">01</span><div><h2>The signal, before and after</h2></div></div>
+  <div class="prose">
+    <p>Each record is about 30 minutes of two-channel ECG sampled at 360 Hz. Raw traces carry
+    <em>baseline wander</em> — a slow drift from breathing and electrode movement — plus muscle noise.
+    A 0.5–40 Hz Butterworth bandpass removes both.</p>
+    <p>The filter is applied forwards and backwards (<code>filtfilt</code>), so its net phase shift is
+    zero. That is not a stylistic choice: a one-directional filter delays the signal by an amount that
+    varies with frequency, which would slide every QRS complex away from its annotated position and
+    misalign all 109,446 beat windows by an unknown offset.</p>
+  </div>
+  <figure class="grid-paper">
+    <div class="legend">
+      <span><i class="sw" style="background:var(--s2)"></i>Raw signal</span>
+      <span><i class="sw" style="background:var(--s1)"></i>Filtered (0.5–40 Hz, zero-phase)</span>
+    </div>
+    <div class="scroller"><svg id="c-denoise" viewBox="0 0 1040 260" role="img"
+      aria-label="Five seconds of record 100, raw and filtered, showing baseline drift removed while QRS peaks stay in place."></svg></div>
+    <figcaption>Record 100, first five seconds. The raw trace sags and rises; the filtered trace sits flat.
+    <b>The QRS spikes do not move horizontally</b> — that preserved alignment is what every downstream
+    step depends on.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">02</span><div><h2>Every annotation is accounted for</h2></div></div>
+  <div class="prose">
+    <p>Cardiologists annotated these recordings beat by beat. Not every annotation is a heartbeat —
+    some mark a rhythm change, a moment of poor signal quality, or a waveform landmark. Those are
+    excluded rather than mislabelled, because folding a rhythm marker into a beat class would inject
+    beats into the dataset that never existed.</p>
+    <p>A beat is also dropped when its 300-sample window would run off the end of the recording.
+    It is dropped, never zero-padded: padding would invent a flat stretch of signal that a model
+    would happily learn from.</p>
+  </div>
+  <figure>
+    <div class="scroller"><svg id="c-funnel" viewBox="0 0 1040 74" role="img"
+      aria-label="Breakdown of 112,647 annotations into beats kept, non-beat annotations excluded, and boundary drops."></svg></div>
+    <div class="keyrow" id="c-funnel-key"></div>
+    <figcaption><b>112,647 annotations = 109,446 beats kept + 3,153 non-beat + 48 boundary drops + 0 unknown.</b>
+    The arithmetic reconciles exactly, per record and overall — a test asserts it. Beat annotations total
+    109,494, which matches the figure published for this database.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">03</span><div><h2>What each beat type looks like</h2></div></div>
+  <div class="prose">
+    <p>Every beat is cut to 300 samples — 100 before the R-peak, 200 after — and labelled into the five
+    AAMI classes. Averaging all the beats of one class shows its characteristic shape.</p>
+  </div>
+  <figure>
+    <div class="sm-grid" id="c-beats"></div>
+    <figcaption>Mean beat per class across the 18 training records, R-peak fixed at sample 100 (dashed line).
+    <b>V beats are visibly wider and taller</b> — that shape difference is why ventricular detection works well.
+    <b>S beats look almost identical to normal ones</b>, which is the whole problem, and the subject of the
+    last section on this page.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">04</span><div><h2>The classes are wildly imbalanced</h2></div></div>
+  <div class="cols">
+    <div>
+      <p>Normal beats are the overwhelming majority. This is why <b>accuracy is a useless
+      headline number here</b>: a model that answers "normal" every single time scores about 86%
+      while catching no arrhythmias at all.</p>
+      <p>The pipeline measures the imbalance and reports suggested class weights. It does not resample.
+      Rebalancing is a decision that belongs next to the loss function at training time — doing it during
+      preprocessing would destroy the true distribution and make honest evaluation impossible.</p>
+      <div class="note"><b>Q collapses from 8,039 to 13</b> between all records and the training split.
+      Almost every Q beat is a pacemaker beat inside records 102, 104, 107 and 217, which the AAMI
+      convention excludes. They are still processed and written to disk — excluded is not discarded.</div>
+    </div>
+    <figure style="margin-top:0">
+      <div class="scroller"><svg id="c-classes" viewBox="0 0 500 300" role="img"
+        aria-label="Beat counts per AAMI class on a log scale, all records versus the training split."></svg></div>
+      <figcaption>Log scale — the classes differ by more than two orders of magnitude.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">05</span><div><h2>Splitting by patient, never by beat</h2></div></div>
+  <div class="prose">
+    <p>The single most important rule. If beats from one patient land on both sides of the split, a model
+    learns to recognise <em>the patient</em> rather than the arrhythmia, and reported accuracy becomes
+    meaningless. No function in this codebase accepts a split-unit argument, so beat-level splitting
+    is not merely discouraged — there is no way to ask for it.</p>
+    <p>Results below use the DS1/DS2 division from de Chazal et al. (2004): 22 patients to train on,
+    22 completely unseen patients to test on, with the four pacemaker records excluded.</p>
+  </div>
+  <figure>
+    <div class="scroller"><svg id="c-split" viewBox="0 0 1040 128" role="img"
+      aria-label="The 48 records divided into 18 training, 4 validation, 22 test, and 4 excluded."></svg></div>
+    <figcaption>Every one of the 48 records, coloured by where it went. <b>The 22 test patients are never
+    seen during training</b>, and the normalisation statistics are fitted on the training records alone.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">06</span><div><h2>How the baseline performs</h2></div></div>
+  <div class="prose">
+    <p>A Random Forest on six timing features plus the beat shape, tested on 49,690 beats from
+    22 patients it has never seen.</p>
+  </div>
+  <div class="cols">
+    <figure style="margin-top:0">
+      <div class="scroller"><svg id="c-cm" viewBox="0 0 460 402" role="img"
+        aria-label="Confusion matrix: rows are the true class, columns the predicted class."></svg></div>
+      <figcaption>Rows are the true class, columns what the model predicted. <b>A perfect model would
+      put everything on the diagonal.</b> Hover any cell for counts.</figcaption>
+    </figure>
+    <figure style="margin-top:0">
+      <div class="legend">
+        <span><i class="sw box" style="background:var(--s1)"></i>Recall — of the beats that exist, how many were found</span>
+        <span><i class="sw box" style="background:var(--s2)"></i>Precision — of the beats flagged, how many were right</span>
+      </div>
+      <div class="scroller"><svg id="c-perclass" viewBox="0 0 460 288" role="img"
+        aria-label="Recall and precision per AAMI class."></svg></div>
+      <figcaption>Recall is the number that matters clinically: a missed arrhythmia is worse than a
+      false alarm.</figcaption>
+    </figure>
+  </div>
+  <figure>
+    <div class="scroller"><table>
+      <thead><tr><th>Model / features</th><th>Macro recall</th><th>N</th><th>S</th><th>V</th><th>F</th><th>Accuracy</th></tr></thead>
+      <tbody id="t-models"></tbody>
+    </table></div>
+    <figcaption>All six combinations tried. <b>The highlighted row is the one reported above.</b>
+    Macro recall averages the per-class recalls, so a rare class counts as much as a common one —
+    which is exactly why it is harder to fake than accuracy.</figcaption>
+  </figure>
+</section>
+
+<section>
+  <div class="sec-head"><span class="stage">07</span><div><h2>The finding: the data is fine, the model isn't</h2></div></div>
+  <div class="prose">
+    <p>Supraventricular (S) recall of 0.271 is far below the 0.760 published for this split. That gap
+    could mean two very different things: the preprocessing lost the signal, or the classifier failed
+    to use it. It is the second — and the evidence is unusually clean.</p>
+    <p>S beats are defined by <em>arriving early</em>, not by looking unusual. The chart below shows each
+    beat's interval from the previous beat, divided by that patient's own average. Normal beats cluster
+    at 1.0. S beats sit well to the left.</p>
+  </div>
+  <figure>
+    <div class="legend">
+      <span><i class="sw box" style="background:var(--s1)"></i>Normal beats (N)</span>
+      <span><i class="sw box" style="background:var(--s2)"></i>Supraventricular beats (S)</span>
+      <span><i class="sw" style="background:var(--ink-3);height:0;border-top:2px dashed var(--ink-3)"></i>Threshold at 0.85</span>
+    </div>
+    <div class="scroller"><svg id="c-rr" viewBox="0 0 1040 300" role="img"
+      aria-label="Distribution of each beat's interval relative to the patient's average, for normal versus supraventricular beats. The two distributions barely overlap."></svg></div>
+    <figcaption>Each curve is scaled to its own peak, because there are 41 times more normal beats than
+    S beats. <b>The separation is nearly complete.</b></figcaption>
+  </figure>
+  <div class="note">
+    <b>A single threshold on this one feature catches 97.2% of S beats.</b> The Random Forest, handed
+    this feature plus 35 others, catches 27.1%. The signal survived preprocessing intact — the model
+    is not reaching for it. The likely cause is recorded: 30 shape features against 6 timing features
+    means a tree is rarely offered the timing feature when it picks a split.
+  </div>
+  <div class="prose">
+    <p>An earlier version was far worse — 6.3% — because the trees were memorising each training
+    patient's individual beat shapes. That works perfectly on patients already seen and transfers to
+    nobody, which is precisely what a patient-separated split is designed to expose. One parameter,
+    chosen on the validation records, fixed it.</p>
+  </div>
+</section>
+
+<footer>
+  <p><b>Not a medical device.</b> These are research artifacts. Nothing here is clinically validated,
+  diagnostic, or fit for patient care.</p>
+  <p>Published figures from de Chazal et al. (2004) are quoted as a reference range, not a like-for-like
+  benchmark — that method used two ECG leads to this one, different features, and a different classifier.
+  No code from it exists publicly and none is used here; what is shared is the DS1/DS2 record lists.
+  F and Q classes remain effectively unlearned and were not investigated.</p>
+</footer>
+
+</div>
+<div class="tip" id="tip" role="status" aria-live="polite"></div>

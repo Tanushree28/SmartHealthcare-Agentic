@@ -3,11 +3,13 @@
 Tracks actual execution against [`PLAN.md`](PLAN.md), under the policy in
 [`../PERMISSIONS.md`](../PERMISSIONS.md).
 
-**Overall status: Phase 0 and Phase 1 COMPLETE.**
-123 offline tests pass; 9 real-data tests pass; all 48 MIT-BIH records downloaded
-and preprocessed.
+**Overall status: Phase 0, Phase 1, the Phase 1b baseline, and the Phase 1c
+published results page COMPLETE.**
+181 offline tests pass; 9 real-data tests pass; all 48 MIT-BIH records downloaded,
+preprocessed, used to train a classical baseline, and presented as a generated
+GitHub Pages site.
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
 
 ---
 
@@ -272,3 +274,221 @@ four paced ones (102, 104, 107, 217).
   MIMIC-III work was done.
 - The `!`-as-non-beat decision follows the canonical AAMI table, but conventions
   in the literature vary (Deviation 8).
+
+---
+
+# Phase 1b — Classical baseline classifier (2026-08-27)
+
+Approved 2026-08-27 after a brainstorming pass. Purpose: confirm the Phase 1
+output is learnable, and establish a floor a later deep model must beat.
+
+## What was built
+
+| File | What |
+|------|------|
+| `src/ecg/features.py` | RR-interval + morphology feature extraction (PDF 2.9) |
+| `src/ecg/baseline.py` | sklearn pipelines, class weighting, leakage tripwire |
+| `src/ecg/evaluate.py` | per-class metrics, confusion matrix, reporting |
+| `scripts/train_baseline.py` | CLI |
+| `tests/test_features.py` (17), `test_baseline.py` (14), `test_evaluate.py` (11), `test_tripwire.py` (6) | 48 new tests |
+| `COMMANDS.md` | copy-paste command reference (user request) |
+
+New dependency: `scikit-learn==1.7.2`. Installed from a wheel, no source build.
+
+## Test results
+
+| Run | Command | Result |
+|-----|---------|--------|
+| Offline suite | `pytest -q` | **171 passed, 9 deselected in 2.52s** |
+| Real-data suite | `pytest -q -m requires_data` | **9 passed** |
+| DS1/DS2 preprocessing | `preprocess_mitbih.py --strategy ds1_ds2` | 48 ok, 39,840 train beats |
+| Baseline training | `train_baseline.py` | 6 model/feature combinations |
+
+## Results on DS2 (49,690 beats, evaluated after the fix below)
+
+Best model — Random Forest on RR + morphology:
+
+| Class | Support | Recall | Precision |
+|-------|--------:|-------:|----------:|
+| N | 44,196 | 0.904 | 0.959 |
+| S | 1,836 | 0.271 | 0.200 |
+| V | 3,219 | 0.844 | 0.594 |
+| F | 388 | 0.273 | 0.120 |
+| Q | 7 | 0.000 | 0.000 |
+
+Macro recall 0.459. Accuracy 0.872 — reported but uninformative.
+
+### Comparison against published work
+
+de Chazal et al. (2004), same DS1/DS2 split. Figures verified 2026-08-27 against
+two independent sources, not recalled:
+<https://pmc.ncbi.nlm.nih.gov/articles/PMC7924512/> (Table 4) and a corroborating
+search result.
+
+| Class | Published Se | Published PPV | Ours (recall) | Ours (precision) |
+|-------|-------------:|--------------:|--------------:|-----------------:|
+| V (VEB) | 0.803 | 0.817 | **0.844** | 0.594 |
+| S (SVEB) | 0.760 | 0.385 | **0.271** | 0.200 |
+
+**V lands in the published range. S is substantially below it.**
+
+**This is not a reproduction, and the table must not be read as one.** No code
+from de Chazal et al. exists publicly, so none is integrated here; what was
+borrowed is the DS1/DS2 record lists alone. Their method used two ECG leads to
+our one, different morphology features (fixed sampling windows vs our mean
+pooling), four RR features to our six, and LDA rather than a Random Forest.
+The comparison supports one claim only: V detection falls in the published
+range, indicating the Phase 1 output carries the signal it should. It does not
+support any claim about which method is better.
+
+## The S-class finding — the important part
+
+S recall of 0.271 is far below published. Investigation established that **this
+is a limitation of the baseline classifier, not of the Phase 1 data**:
+
+1. The RR features are correct and strongly discriminative. In the training
+   split, S beats have mean `pre_rr` of 0.501 s against 0.845 s for N — exactly
+   the premature arrival that defines the class.
+2. **A single threshold on `pre_rr_ratio < 0.85` achieves S recall of 0.972 on
+   DS2**, against the Random Forest's 0.271 using all 36 features. The signal is
+   present and nearly separable; the model is not exploiting it.
+
+So the data foundation is validated. Closing the S gap is a modelling problem
+for a later phase, and the diagnosed cause is recorded below so it is not
+rediscovered from scratch.
+
+**Diagnosed cause, not yet acted on:** the feature matrix is 30 morphology
+features against 6 RR features. With `max_features='sqrt'`, a tree is offered
+~6 of 36 features per split, so the RR features are rarely available at the top
+of a tree. Rebalancing the feature counts, or raising `max_features`, is the
+obvious next experiment — **to be chosen on validation records, never on DS2.**
+
+## Problems Discovered
+
+9. **Random Forest S recall collapsed to 0.063 (found and fixed 2026-08-27).**
+   The first run used `min_samples_leaf=2` with unlimited depth. Fully-grown
+   trees memorised patient-specific beat morphology, which predicts the label
+   perfectly *within* a training patient and transfers to nobody. On an
+   inter-patient split that is precisely the wrong thing to learn.
+   *Caught by:* S recall of 0.063 against a published 0.760 — a 12x gap, too
+   large to be ordinary baseline weakness.
+   *Fixed by:* `min_samples_leaf=50`, chosen by comparing six configurations on
+   the four **validation** records. S recall on validation went 0.099 -> 0.519;
+   on DS2, 0.063 -> 0.271.
+   *Regression test:* `test_baseline_generalises_across_patients_using_timing`.
+
+10. **The first regression test for #9 was worthless (found 2026-08-27).**
+    It passed with both the buggy and the fixed parameter, so it asserted
+    nothing. The synthetic fixture had morphology features that were pure noise,
+    leaving nothing for the trees to memorise. A second attempt also failed to
+    discriminate. The missing ingredient turned out to be **class imbalance**:
+    only after S prevalence was set to ~2.2%, matching the real split, did the
+    failure reproduce. The fixture now yields S recall 0.00-0.09 with
+    `min_samples_leaf=2` and 0.68-0.84 with 50, verified across three seeds.
+    *Recorded because* a regression test that cannot fail is worse than none —
+    it produces confidence without evidence.
+
+## Deviations
+
+**Deviation 9 — DS2 was evaluated more than once.**
+*What changed:* the design said the test split would be touched once.
+*What happened:* it was evaluated on the buggy configuration, then used for the
+single-threshold diagnostic that established the S signal was present, then
+evaluated again after the fix. Three touches, not one.
+*Why it stands:* the diagnostic was debugging, not model selection, and the
+`min_samples_leaf` fix was chosen entirely on validation records. But the letter
+of the rule was broken and is recorded rather than glossed.
+*Added risk:* low, and bounded — no hyperparameter was selected using DS2. Any
+further tuning must go through validation, and DS2 should now be considered
+partially spent for this feature set.
+
+**Deviation 10 — the F and Q classes remain effectively unlearned.**
+F recall 0.273, Q recall 0.000 (7 beats in DS2). Not investigated: F and Q are
+rare, and the published comparison does not report them either. Flagged so their
+absence is not mistaken for success.
+
+---
+
+# Phase 1c — Published results page (2026-08-27)
+
+A GitHub Pages site presenting the pipeline and baseline results visually.
+
+## What was built
+
+| Path | What |
+|------|------|
+| `site/{head,body,script}.html` | Page templates — styles, markup, chart rendering |
+| `scripts/build_report.py` | Reads the processed data, assembles `docs/index.html` |
+| `docs/index.html` | The generated page (committed; GitHub Pages serves it) |
+| `docs/.nojekyll` | Stops GitHub running Jekyll over the directory |
+| `tests/test_report.py` | 10 tests, offline, no processed data needed |
+
+**The page is generated, not hand-written.** Every figure is computed from
+`manifest.csv`, `splits.json`, `baseline_metrics.json` and the beat `.npz` files,
+so the published numbers cannot drift from the pipeline that produced them.
+`build_report.py` refuses to run when the data it needs is absent and names the
+command that produces it.
+
+Charts: raw vs filtered signal, the annotation accounting, mean beat shape per
+class, class distribution, the record-wise split, the confusion matrix,
+per-class recall/precision, the model comparison table, and the RR-ratio
+distribution that carries the S-class finding.
+
+No dependency was added — the page is inline SVG rendered by vanilla JS, with
+Google Fonts as the only external asset.
+
+## Deployment
+
+`docs/` folder on `master`. Requires one manual step in GitHub's settings
+(Settings → Pages → Source: `master`, folder `/docs`), documented in
+`COMMANDS.md`. No CI workflow — pushing a rebuilt `docs/index.html` republishes.
+
+## Test results
+
+| Run | Command | Result |
+|-----|---------|--------|
+| Offline suite | `pytest -q` | **181 passed, 9 deselected in 3.17s** |
+| Real-data suite | `pytest -q -m requires_data` | **9 passed** |
+
+## Problems Discovered
+
+11. **Mojibake in the rendered page — twice (2026-08-27).** Em-dashes rendered
+    as `â€"`. The first fix converted the characters to HTML entities in memory
+    during assembly; the next rebuild dropped that step and the bug returned
+    verbatim. *Root cause:* the fix lived in an ad-hoc command rather than in the
+    build itself. *Fixed by* making escaping part of `build_report.assemble`,
+    with a hard failure if any non-ASCII survives. Tests
+    `test_output_is_pure_ascii` and
+    `test_assemble_rejects_non_ascii_outside_the_entity_map` cover both halves.
+    *Recorded because* the second occurrence was caused by the shape of the fix,
+    not the difficulty of the bug.
+
+12. **CSS `fill` silently overrode SVG presentation attributes (2026-08-27).**
+    Chart text carried `class="axis"` (which sets `fill`) *and* a `fill`
+    attribute for white-on-colour labels. CSS wins over presentation attributes,
+    so every such label rendered grey on a coloured bar — legible enough to miss
+    in a glance, wrong everywhere. *Fixed by* moving those overrides to inline
+    `style`. A first pass with a regex missed one call that wrapped across two
+    lines; found by grepping for the remaining attribute form rather than
+    assuming the pass was complete.
+
+13. **Confusion matrix was clipped (2026-08-27).** Content reached y=390 inside a
+    330-tall `viewBox`, cutting off the Q row entirely. Found by measuring
+    `getBBox()` in the browser rather than by eye.
+
+14. **Matrix text contrast broke in dark mode (2026-08-27).** Text colour was
+    chosen by ramp *index*, but the ramp inverts between themes, so the rule
+    produced white text on light cells. *Fixed by* choosing from the cell
+    colour's relative luminance, which is theme-independent.
+
+15. **A stale metrics file made the model table show one row instead of six
+    (2026-08-27).** Not a code bug — `train_baseline.py` writes all six. The
+    extraction had read a `baseline_metrics.json` left from an intermediate run.
+    Re-running training produced six results with numbers identical to the
+    earlier console output, which also re-confirmed determinism.
+
+## Deviations
+
+**Deviation 11 — the page was not part of any approved plan.**
+`PLAN.md` does not mention a published site; it was requested directly on
+2026-08-27. Recorded so the plan and the repository do not silently disagree.

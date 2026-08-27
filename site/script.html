@@ -1,0 +1,337 @@
+<script>
+(function(){
+"use strict";
+const D = JSON.parse(document.getElementById("viz-data").textContent);
+const NS = "http://www.w3.org/2000/svg";
+const CLS = ["N","S","V","F","Q"];
+const CLS_LONG = {N:"Normal",S:"Supraventricular",V:"Ventricular",F:"Fusion",Q:"Unclassifiable / paced"};
+const fmt = n => n.toLocaleString("en-US");
+const el = (t,a) => { const e=document.createElementNS(NS,t); for(const k in a) e.setAttribute(k,a[k]); return e; };
+function lum(hex){
+  const m=hex.trim().match(/^#?([0-9a-f]{6})$/i);
+  if(!m) return 0.5;
+  const v=parseInt(m[1],16), ch=[(v>>16)&255,(v>>8)&255,v&255].map(c=>{
+    c/=255; return c<=0.03928? c/12.92 : Math.pow((c+0.055)/1.055,2.4); });
+  return 0.2126*ch[0]+0.7152*ch[1]+0.0722*ch[2];
+}
+const inkOn = bg => lum(bg) > 0.42 ? "#0b0b0b" : "#ffffff";
+const dimOn = bg => lum(bg) > 0.42 ? "rgba(11,11,11,.62)" : "rgba(255,255,255,.75)";
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+// ---- tooltip -------------------------------------------------------------
+const tip = document.getElementById("tip");
+function showTip(e,title,body){
+  tip.innerHTML = '<span class="t"></span><span class="b"></span>';
+  tip.querySelector(".t").textContent = title;
+  tip.querySelector(".b").innerHTML = body;
+  tip.style.opacity = 1;
+  const r = tip.getBoundingClientRect();
+  let x = e.clientX + 14, y = e.clientY - r.height - 10;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - 14;
+  if (y < 8) y = e.clientY + 18;
+  tip.style.left = x+"px"; tip.style.top = y+"px";
+}
+const hideTip = () => tip.style.opacity = 0;
+function hit(node, title, body){
+  node.setAttribute("data-hit","");
+  node.addEventListener("pointerenter", e => showTip(e,title,body));
+  node.addEventListener("pointermove", e => showTip(e,title,body));
+  node.addEventListener("pointerleave", hideTip);
+}
+addEventListener("scroll", hideTip, {passive:true});
+
+// ---- 1. denoise trace ----------------------------------------------------
+(function(){
+  const svg = document.getElementById("c-denoise");
+  const W=1040,H=260,L=44,R=14,T=14,B=30;
+  const raw=D.denoise.raw, fil=D.denoise.filtered, n=raw.length, fs=D.denoise.fs;
+  const all=raw.concat(fil), lo=Math.min(...all), hi=Math.max(...all), pad=(hi-lo)*0.06;
+  const x=i=>L+i/(n-1)*(W-L-R), y=v=>T+(hi+pad-v)/((hi-lo)+2*pad)*(H-T-B);
+  for(let s=0;s<=5;s++){ const px=x(s*fs);
+    svg.appendChild(el("line",{x1:px,y1:T,x2:px,y2:H-B,class:"gridline"}));
+    const t=el("text",{x:px,y:H-11,class:"axis","text-anchor":"middle"}); t.textContent=s+"s"; svg.appendChild(t); }
+  for(const mv of [-0.5,0,0.5,1.0]){ if(mv<lo-pad||mv>hi+pad) continue; const py=y(mv);
+    svg.appendChild(el("line",{x1:L,y1:py,x2:W-R,y2:py,class:"gridline"}));
+    const t=el("text",{x:L-8,y:py+3.5,class:"axis","text-anchor":"end"}); t.textContent=mv.toFixed(1); svg.appendChild(t); }
+  const lab=el("text",{x:L-8,y:T-2,class:"axis","text-anchor":"end"}); lab.textContent="mV"; svg.appendChild(lab);
+  const path = d => d.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join("");
+  svg.appendChild(el("path",{d:path(raw),fill:"none",stroke:css("--s2"),"stroke-width":1.15,opacity:.85,
+    "stroke-linejoin":"round"}));
+  svg.appendChild(el("path",{d:path(fil),fill:"none",stroke:css("--s1"),"stroke-width":1.5,
+    "stroke-linejoin":"round"}));
+})();
+
+// ---- 2. accounting bar ---------------------------------------------------
+(function(){
+  const svg=document.getElementById("c-funnel"); const P=D.pipeline_totals;
+  const W=1040,barY=22,barH=44,total=P.annotations;
+  const segs=[
+    {k:"Beats kept",v:P.kept,c:css("--s1"),d:"segmented into 300-sample windows"},
+    {k:"Non-beat annotations",v:P.nonbeat,c:css("--s2"),d:"rhythm, quality and landmark markers"},
+    {k:"Boundary drops",v:P.boundary,c:css("--ink-3"),d:"window would run off the recording"},
+    {k:"Unknown symbols",v:P.unknown,c:css("--crit"),d:"none - the label table has no gaps"}
+  ];
+  const head=el("text",{x:0,y:13,class:"axis-t",style:"fill:"+css("--ink-2")});
+  head.textContent=fmt(total)+" annotations"; svg.appendChild(head);
+  let cx=0;
+  segs.forEach(s=>{
+    if(!s.v) return;
+    const w=Math.max(s.v/total*W,3);
+    const g=el("g",{});
+    g.appendChild(el("rect",{x:cx,y:barY,width:Math.max(w-2,1.5),height:barH,rx:3,fill:s.c}));
+    hit(g,s.k,"<b>"+fmt(s.v)+"</b> &#183; "+(s.v/total*100).toFixed(2)+"% of annotations<br>"+
+      "<span style='color:var(--ink-3)'>"+s.d+"</span>");
+    svg.appendChild(g);
+    if(w>150){
+      const t=el("text",{x:cx+12,y:barY+27,class:"axis-t",style:"fill:"+"#fff","font-weight":"600"});
+      t.textContent=fmt(s.v)+" beats kept"; svg.appendChild(t);
+    }
+    cx+=w;
+  });
+  const key=document.getElementById("c-funnel-key");
+  key.innerHTML=segs.map(s=>'<span class="k"><i style="background:'+s.c+
+    (s.v?'':';opacity:.35')+'"></i><span><b>'+fmt(s.v)+'</b> '+s.k+
+    ' <s>'+(s.v/total*100).toFixed(2)+'%</s></span></span>').join("");
+})();
+
+// ---- 3. mean beats small multiples --------------------------------------
+(function(){
+  const host=document.getElementById("c-beats");
+  const counts=D.beat_counts_train;
+  CLS.forEach(c=>{
+    const series=D.mean_beats[c]; if(!series) return;
+    const d=document.createElement("div"); d.className="sm";
+    d.innerHTML='<h4><span>'+c+' &mdash; '+CLS_LONG[c]+'</span><em>'+fmt(counts[c]||0)+'</em></h4>';
+    const W=200,H=94,T=8,B=8,L=4,R=4;
+    const svg=el("svg",{viewBox:"0 0 "+W+" "+H,role:"img"});
+    svg.setAttribute("aria-label","Mean "+CLS_LONG[c]+" beat shape");
+    const lo=Math.min(...series), hi=Math.max(...series), pad=(hi-lo)*0.12||1;
+    const x=i=>L+i/(series.length-1)*(W-L-R), y=v=>T+(hi+pad-v)/((hi-lo)+2*pad)*(H-T-B);
+    const rx=x(100);
+    svg.appendChild(el("line",{x1:rx,y1:T,x2:rx,y2:H-B,stroke:css("--ink-3"),"stroke-width":1,
+      "stroke-dasharray":"2 3",opacity:.55}));
+    svg.appendChild(el("path",{d:series.map((v,i)=>(i?"L":"M")+x(i).toFixed(1)+" "+y(v).toFixed(1)).join(""),
+      fill:"none",stroke:css("--s1"),"stroke-width":1.7,"stroke-linejoin":"round"}));
+    d.appendChild(svg); host.appendChild(d);
+  });
+})();
+
+// ---- 4. class distribution (log) ----------------------------------------
+(function(){
+  const svg=document.getElementById("c-classes");
+  const W=500,H=300,L=40,R=88,T=16,B=34;
+  const all=D.class_all, tr=D.beat_counts_train;
+  const maxv=Math.max(...CLS.map(c=>all[c]||0));
+  const lg=v=>Math.log10(Math.max(v,1)), top=Math.ceil(lg(maxv));
+  const x=v=>L+lg(v)/top*(W-L-R);
+  const rowH=(H-T-B)/CLS.length;
+  for(let p=0;p<=top;p++){ const px=L+p/top*(W-L-R);
+    svg.appendChild(el("line",{x1:px,y1:T,x2:px,y2:H-B,class:"gridline"}));
+    const t=el("text",{x:px,y:H-B+16,class:"axis","text-anchor":"middle"});
+    t.textContent=p===0?"1":"10"+["","","²","³","⁴","⁵"][p]; svg.appendChild(t); }
+  const axl=el("text",{x:(L+W-R)/2,y:H-6,class:"axis","text-anchor":"middle"});
+  axl.textContent="beats (log scale)"; svg.appendChild(axl);
+  CLS.forEach((c,i)=>{
+    const yTop=T+i*rowH, h=rowH*0.32;
+    const lab=el("text",{x:L-9,y:yTop+rowH/2+4,class:"axis-t","text-anchor":"end","font-weight":"600"});
+    lab.textContent=c; svg.appendChild(lab);
+    [[all[c]||0,css("--s1"),"All records",yTop+rowH/2-h-2],
+     [tr[c]||0,css("--s2"),"Training split",yTop+rowH/2+2]].forEach(([v,col,name,yy])=>{
+      const g=el("g",{});
+      g.appendChild(el("rect",{x:L,y:yy,width:Math.max(x(v)-L,1.5),height:h,rx:2,fill:col}));
+      hit(g,c+" · "+CLS_LONG[c],name+": <b>"+fmt(v)+"</b> beats");
+      svg.appendChild(g);
+    });
+    const n=el("text",{x:W-R+8,y:yTop+rowH/2+4,class:"axis",style:"fill:"+css("--ink-2")});
+    n.textContent=fmt(all[c]||0)+" / "+fmt(tr[c]||0); svg.appendChild(n);
+  });
+  const lg1=el("text",{x:W-R+8,y:T-3,class:"axis"}); lg1.textContent="all / train"; svg.appendChild(lg1);
+})();
+
+// ---- 5. split strip ------------------------------------------------------
+(function(){
+  const svg=document.getElementById("c-split");
+  const ALL=["100","101","102","103","104","105","106","107","108","109","111","112","113","114","115","116",
+    "117","118","119","121","122","123","124","200","201","202","203","205","207","208","209","210","212",
+    "213","214","215","217","219","220","221","222","223","228","230","231","232","233","234"];
+  const DS1=["101","106","108","109","112","114","115","116","118","119","122","124","201","203","205","207","208","209","215","220","223","230"];
+  const DS2=["100","103","105","111","113","117","121","123","200","202","210","212","213","214","219","221","222","228","231","232","233","234"];
+  const VAL=["112","205","215","223"], PACED=["102","104","107","217"];
+  const kind=r=>PACED.includes(r)?"excluded":VAL.includes(r)?"val":DS1.includes(r)?"train":"test";
+  const COL={train:css("--s1"),val:css("--q300"),test:css("--s2"),excluded:css("--ink-3")};
+  const NAME={train:"Train (DS1)",val:"Validation (from DS1)",test:"Test (DS2) — never seen in training",excluded:"Excluded — pacemaker record"};
+  const W=1040,cols=24,cw=W/cols,ch=30,T=26;
+  ALL.forEach((r,i)=>{
+    const cx=(i%cols)*cw, cy=T+Math.floor(i/cols)*(ch+22), k=kind(r);
+    const g=el("g",{});
+    g.appendChild(el("rect",{x:cx+1.5,y:cy,width:cw-3,height:ch,rx:3,fill:COL[k],
+      opacity:k==="excluded"?.45:1}));
+    const t=el("text",{x:cx+cw/2,y:cy+ch/2+4,class:"axis","text-anchor":"middle",style:"fill:"+"#fff","font-weight":"500"});
+    t.textContent=r; g.appendChild(t);
+    hit(g,"Record "+r,NAME[k]);
+    svg.appendChild(g);
+  });
+  let lx=0;
+  [["train","18 train"],["val","4 validation"],["test","22 test"],["excluded","4 excluded"]].forEach(([k,label])=>{
+    svg.appendChild(el("rect",{x:lx,y:6,width:11,height:11,rx:2,fill:COL[k],opacity:k==="excluded"?.45:1}));
+    const t=el("text",{x:lx+16,y:15.5,class:"axis",style:"fill:"+css("--ink-2")}); t.textContent=label;
+    svg.appendChild(t); lx+=16+label.length*6.1+22;
+  });
+})();
+
+// ---- 6. confusion matrix -------------------------------------------------
+const MAIN = D.results.find(r=>r.label==="random_forest / rr+morphology");
+(function(){
+  const svg=document.getElementById("c-cm");
+  const cm=MAIN.cm, W=460,L=64,T=52,cell=68,gap=3;
+  const RAMP=["--q100","--q200","--q300","--q400","--q500","--q600","--q700"].map(css);
+  const hdr=el("text",{x:L+cell*2.5,y:16,class:"axis-t","text-anchor":"middle","font-weight":"600"});
+  hdr.textContent="predicted"; svg.appendChild(hdr);
+  const vl=el("text",{x:16,y:T+cell*2.5,class:"axis-t","font-weight":"600","text-anchor":"middle",
+    transform:"rotate(-90 16 "+(T+cell*2.5)+")"}); vl.textContent="true"; svg.appendChild(vl);
+  CLS.forEach((c,j)=>{ const t=el("text",{x:L+j*cell+cell/2,y:T-10,class:"axis-t","text-anchor":"middle"});
+    t.textContent=c; svg.appendChild(t); });
+  cm.forEach((row,i)=>{
+    const support=row.reduce((a,b)=>a+b,0);
+    const t=el("text",{x:L-11,y:T+i*cell+cell/2+4,class:"axis-t","text-anchor":"end"});
+    t.textContent=CLS[i]; svg.appendChild(t);
+    row.forEach((v,j)=>{
+      const share=support? v/support : 0;
+      const idx = v===0?-1:Math.min(RAMP.length-1,Math.floor(Math.pow(share,0.42)*RAMP.length));
+      const g=el("g",{});
+      g.appendChild(el("rect",{x:L+j*cell+gap/2,y:T+i*cell+gap/2,width:cell-gap,height:cell-gap,rx:3,
+        fill:idx<0?"transparent":RAMP[idx],stroke:idx<0?css("--rule"):"none","stroke-width":1}));
+      if(v>0){
+        const bg = RAMP[idx];
+        const tx=el("text",{x:L+j*cell+cell/2,y:T+i*cell+cell/2+1,class:"axis-t","text-anchor":"middle",
+          "font-weight": i===j?"600":"400", style:"fill:"+inkOn(bg)});
+        tx.textContent = v>=1000? (v/1000).toFixed(1)+"k" : v;
+        g.appendChild(tx);
+        const p=el("text",{x:L+j*cell+cell/2,y:T+i*cell+cell/2+15,class:"axis","text-anchor":"middle",
+          style:"fill:"+dimOn(bg)});
+        p.textContent=(share*100).toFixed(share<1?1:0)+"%"; g.appendChild(p);
+      }
+      hit(g, (i===j?"Correct · ":"Confused · ")+CLS[i]+" → "+CLS[j],
+        "<b>"+fmt(v)+"</b> beats<br>"+(share*100).toFixed(2)+"% of all true "+CLS[i]+" beats"+
+        (i===j?"":"<br><span style='color:var(--ink-3)'>"+CLS_LONG[CLS[i]]+" called "+CLS_LONG[CLS[j]]+"</span>"));
+      svg.appendChild(g);
+    });
+  });
+})();
+
+// ---- 7. per-class recall / precision ------------------------------------
+(function(){
+  const svg=document.getElementById("c-perclass");
+  const W=460,H=288,L=42,R=16,T=14,B=34, rows=MAIN.per_class;
+  const rowH=(H-T-B)/rows.length;
+  [0,.25,.5,.75,1].forEach(v=>{ const px=L+v*(W-L-R);
+    svg.appendChild(el("line",{x1:px,y1:T,x2:px,y2:H-B,class:"gridline"}));
+    const t=el("text",{x:px,y:H-B+16,class:"axis","text-anchor":"middle"});
+    t.textContent=v.toFixed(v===0||v===1?0:2); svg.appendChild(t); });
+  const axl=el("text",{x:(L+W-R)/2,y:H-6,class:"axis","text-anchor":"middle"});
+  axl.textContent="proportion"; svg.appendChild(axl);
+  rows.forEach((r,i)=>{
+    const yTop=T+i*rowH, h=rowH*0.30;
+    const lab=el("text",{x:L-9,y:yTop+rowH/2+4,class:"axis-t","text-anchor":"end","font-weight":"600"});
+    lab.textContent=r["class"]; svg.appendChild(lab);
+    [["recall",r.recall,css("--s1"),yTop+rowH/2-h-2],["precision",r.precision,css("--s2"),yTop+rowH/2+2]]
+    .forEach(([name,v,col,yy])=>{
+      const g=el("g",{});
+      g.appendChild(el("rect",{x:L,y:yy,width:Math.max(v*(W-L-R),1.5),height:h,rx:2,fill:col}));
+      hit(g,r["class"]+" · "+CLS_LONG[r["class"]],name+" <b>"+v.toFixed(3)+"</b><br>"+
+        fmt(r.support)+" beats in the test set");
+      svg.appendChild(g);
+      if(v>0.14){ const t=el("text",{x:L+v*(W-L-R)-6,y:yy+h/2+3.5,class:"axis","text-anchor":"end",
+        style:"fill:#fff","font-weight":"500"}); t.textContent=v.toFixed(2); svg.appendChild(t); }
+    });
+  });
+})();
+
+// ---- 8. model table ------------------------------------------------------
+(function(){
+  const tb=document.getElementById("t-models");
+  D.results.slice().sort((a,b)=>b.macro-a.macro).forEach(r=>{
+    const tr=document.createElement("tr");
+    if(r.label===MAIN.label) tr.className="best";
+    const pc={}; r.per_class.forEach(c=>pc[c["class"]]=c.recall);
+    const parts=r.label.split(" / ");
+    tr.innerHTML='<td>'+parts[0].replace("_"," ")+' <span class="tag">'+parts[1]+'</span></td>'+
+      '<td class="num"><b>'+r.macro.toFixed(3)+'</b></td>'+
+      ["N","S","V","F"].map(c=>'<td class="num">'+pc[c].toFixed(3)+'</td>').join("")+
+      '<td class="num" style="color:var(--ink-3)">'+r.acc.toFixed(3)+'</td>';
+    tb.appendChild(tr);
+  });
+})();
+
+// ---- 9. RR histogram -----------------------------------------------------
+(function(){
+  const svg=document.getElementById("c-rr");
+  const W=1040,H=300,L=48,R=18,T=16,B=42;
+  const bins=D.rr_hist.bins, nb=bins.length-1;
+  const series=[["N",D.rr_hist.N,css("--s1")],["S",D.rr_hist.S,css("--s2")]];
+  const x=v=>L+(v-bins[0])/(bins[nb]-bins[0])*(W-L-R);
+  for(let v=0.2;v<=1.81;v+=0.2){ const px=x(v);
+    svg.appendChild(el("line",{x1:px,y1:T,x2:px,y2:H-B,class:"gridline"}));
+    const t=el("text",{x:px,y:H-B+16,class:"axis","text-anchor":"middle"});
+    t.textContent=v.toFixed(1); svg.appendChild(t); }
+  const axl=el("text",{x:(L+W-R)/2,y:H-8,class:"axis-t","text-anchor":"middle"});
+  axl.textContent="beat interval ÷ this patient's average interval"; svg.appendChild(axl);
+  const yl=el("text",{x:14,y:(T+H-B)/2,class:"axis","text-anchor":"middle",
+    transform:"rotate(-90 14 "+((T+H-B)/2)+")"}); yl.textContent="share of that class's beats"; svg.appendChild(yl);
+  const thr=x(0.85);
+  svg.appendChild(el("line",{x1:thr,y1:T,x2:thr,y2:H-B,stroke:css("--ink-3"),"stroke-width":1.5,
+    "stroke-dasharray":"4 4"}));
+  const tt=el("text",{x:thr+7,y:T+12,class:"axis",style:"fill:"+css("--ink-2")}); tt.textContent="0.85"; svg.appendChild(tt);
+  series.forEach(([name,counts,col])=>{
+    const peak=Math.max(...counts), total=counts.reduce((a,b)=>a+b,0);
+    const y=v=>T+(1-v/peak)*(H-T-B);
+    let d="M"+x(bins[0])+" "+(H-B);
+    counts.forEach((v,i)=>{ d+="L"+x(bins[i]).toFixed(1)+" "+y(v).toFixed(1)
+      +"L"+x(bins[i+1]).toFixed(1)+" "+y(v).toFixed(1); });
+    d+="L"+x(bins[nb])+" "+(H-B)+"Z";
+    svg.appendChild(el("path",{d:d,fill:col,opacity:.22}));
+    svg.appendChild(el("path",{d:d,fill:"none",stroke:col,"stroke-width":2,"stroke-linejoin":"round"}));
+    counts.forEach((v,i)=>{
+      if(!v) return;
+      const g=el("g",{});
+      g.appendChild(el("rect",{x:x(bins[i]),y:T,width:Math.max(x(bins[i+1])-x(bins[i]),1),height:H-T-B,
+        fill:"transparent"}));
+      hit(g,name+" · "+CLS_LONG[name],"interval ratio "+bins[i].toFixed(2)+"–"+bins[i+1].toFixed(2)+
+        "<br><b>"+fmt(v)+"</b> beats · "+(v/total*100).toFixed(1)+"% of "+name);
+      svg.appendChild(g);
+    });
+  });
+})();
+
+// ---- stat tiles ----------------------------------------------------------
+document.getElementById("s-beats").textContent = fmt(D.pipeline_totals.kept);
+document.getElementById("s-records").textContent = D.pipeline_totals.records;
+document.getElementById("s-v").textContent =
+  MAIN.per_class.find(c=>c["class"]==="V").recall.toFixed(3);
+})();
+</script>
+<script>
+// Standalone theme toggle. The artifact host stamps data-theme itself; a
+// GitHub Pages visitor has no such host, so the page carries its own control.
+// Three states, matching how the stylesheet is written: system (no stamp),
+// light, dark.
+(function(){
+  const KEY="smarthealth-theme", root=document.documentElement, btn=document.getElementById("theme-toggle");
+  if(!btn) return;
+  const order=["system","light","dark"];
+  let mode="system";
+  try{ const v=localStorage.getItem(KEY); if(order.includes(v)) mode=v; }catch(e){}
+  function paint(){
+    if(mode==="system") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme",mode);
+    btn.textContent = mode==="system" ? "Auto" : mode==="light" ? "Light" : "Dark";
+    btn.setAttribute("aria-label","Colour theme: "+btn.textContent+". Click to change.");
+  }
+  btn.addEventListener("click",()=>{
+    mode=order[(order.indexOf(mode)+1)%order.length];
+    try{ localStorage.setItem(KEY,mode); }catch(e){}
+    paint();
+  });
+  paint();
+})();
+</script>
