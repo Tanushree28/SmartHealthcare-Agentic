@@ -1,0 +1,611 @@
+{
+  "balanced": true,
+  "results": [
+    {
+      "accuracy": 0.8719,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          39964,
+          1759,
+          1806,
+          659,
+          8
+        ],
+        [
+          1290,
+          498,
+          46,
+          2,
+          0
+        ],
+        [
+          151,
+          232,
+          2717,
+          119,
+          0
+        ],
+        [
+          275,
+          2,
+          5,
+          106,
+          0
+        ],
+        [
+          5,
+          0,
+          2,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "random_forest / rr+morphology",
+      "macro_recall": 0.4585,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9307,
+          "precision": 0.9587,
+          "recall": 0.9042,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.2302,
+          "precision": 0.1999,
+          "recall": 0.2712,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.6971,
+          "precision": 0.5938,
+          "recall": 0.8441,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.1664,
+          "precision": 0.1196,
+          "recall": 0.2732,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.828,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          38914,
+          3673,
+          731,
+          672,
+          206
+        ],
+        [
+          1478,
+          243,
+          99,
+          15,
+          1
+        ],
+        [
+          419,
+          762,
+          1891,
+          146,
+          1
+        ],
+        [
+          105,
+          220,
+          6,
+          57,
+          0
+        ],
+        [
+          2,
+          0,
+          3,
+          2,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "lda / rr+morphology",
+      "macro_recall": 0.3494,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9144,
+          "precision": 0.951,
+          "recall": 0.8805,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.0722,
+          "precision": 0.0496,
+          "recall": 0.1324,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.6357,
+          "precision": 0.6927,
+          "recall": 0.5874,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0891,
+          "precision": 0.0639,
+          "recall": 0.1469,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.8157,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          38514,
+          2467,
+          1557,
+          1658,
+          0
+        ],
+        [
+          1104,
+          114,
+          597,
+          21,
+          0
+        ],
+        [
+          230,
+          1111,
+          1866,
+          12,
+          0
+        ],
+        [
+          380,
+          3,
+          5,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          1,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "random_forest / rr_only",
+      "macro_recall": 0.3026,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9123,
+          "precision": 0.9573,
+          "recall": 0.8714,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.0412,
+          "precision": 0.0309,
+          "recall": 0.0621,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.5151,
+          "precision": 0.4635,
+          "recall": 0.5797,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.7506,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          34169,
+          2931,
+          1361,
+          5103,
+          632
+        ],
+        [
+          1392,
+          103,
+          289,
+          52,
+          0
+        ],
+        [
+          105,
+          162,
+          2762,
+          181,
+          9
+        ],
+        [
+          125,
+          0,
+          35,
+          228,
+          0
+        ],
+        [
+          2,
+          0,
+          1,
+          1,
+          3
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "lda / rr_only",
+      "macro_recall": 0.5407,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.8543,
+          "precision": 0.9546,
+          "recall": 0.7731,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.0409,
+          "precision": 0.0322,
+          "recall": 0.0561,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.7205,
+          "precision": 0.621,
+          "recall": 0.858,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0766,
+          "precision": 0.041,
+          "recall": 0.5876,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0092,
+          "precision": 0.0047,
+          "recall": 0.4286,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.7424,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          33851,
+          5165,
+          4549,
+          635,
+          38
+        ],
+        [
+          1538,
+          271,
+          22,
+          2,
+          4
+        ],
+        [
+          404,
+          38,
+          2762,
+          16,
+          0
+        ],
+        [
+          158,
+          1,
+          221,
+          8,
+          0
+        ],
+        [
+          3,
+          0,
+          4,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "random_forest / morphology_only",
+      "macro_recall": 0.3582,
+      "n_test": 49690,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.8442,
+          "precision": 0.9415,
+          "recall": 0.7652,
+          "support": 44238
+        },
+        {
+          "class": "S",
+          "f1": 0.0741,
+          "precision": 0.0495,
+          "recall": 0.1475,
+          "support": 1837
+        },
+        {
+          "class": "V",
+          "f1": 0.5125,
+          "precision": 0.3654,
+          "recall": 0.8578,
+          "support": 3220
+        },
+        {
+          "class": "F",
+          "f1": 0.0153,
+          "precision": 0.0121,
+          "recall": 0.0206,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.7999,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          38235,
+          3900,
+          1307,
+          634,
+          162
+        ],
+        [
+          1639,
+          155,
+          29,
+          12,
+          2
+        ],
+        [
+          676,
+          918,
+          1299,
+          167,
+          160
+        ],
+        [
+          149,
+          170,
+          6,
+          57,
+          6
+        ],
+        [
+          2,
+          0,
+          5,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "lda / morphology_only",
+      "macro_recall": 0.2998,
+      "n_test": 49690,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9003,
+          "precision": 0.9394,
+          "recall": 0.8643,
+          "support": 44238
+        },
+        {
+          "class": "S",
+          "f1": 0.0444,
+          "precision": 0.0301,
+          "recall": 0.0844,
+          "support": 1837
+        },
+        {
+          "class": "V",
+          "f1": 0.4429,
+          "precision": 0.4909,
+          "recall": 0.4034,
+          "support": 3220
+        },
+        {
+          "class": "F",
+          "f1": 0.0906,
+          "precision": 0.0655,
+          "recall": 0.1469,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    }
+  ],
+  "run": {
+    "command": "python scripts/train_baseline.py --processed-dir ~/physionet-data/processed/mitdb-ds12",
+    "commit_note": "The run wrote its metrics at 14:04; commit 91db046 was made at 14:44. The exact working-tree state at run time was not captured, so this is the nearest commit, not a verified provenance record.",
+    "date": "2026-08-27",
+    "environment": {
+      "numpy": "2.3.3",
+      "python": "3.13.9",
+      "scikit-learn": "1.7.2",
+      "scipy": "1.16.2"
+    },
+    "lda_params": {
+      "priors": "uniform (1/n_classes)"
+    },
+    "n_test_note": "The rr+morphology and rr_only rows were scored on 49,646 beats; the morphology_only rows on 49,690. RR features need both neighbours, so the first and last beat of each test record are dropped when RR is in the feature set. 44 beats, 0.09% -- immaterial to the comparison, recorded so the totals reconcile.",
+    "nearest_commit": "91db046",
+    "phase": "1b",
+    "preprocessing_command": "python scripts/preprocess_mitbih.py --strategy ds1_ds2 --out-dir ~/physionet-data/processed/mitdb-ds12",
+    "random_forest_params": {
+      "class_weight": "balanced",
+      "max_depth": null,
+      "min_samples_leaf": 50,
+      "n_estimators": 200,
+      "n_jobs": -1
+    },
+    "source_path": "~/physionet-data/processed/mitdb-ds12/baseline_metrics.json"
+  },
+  "seed": 20260826,
+  "split_strategy": "ds1_ds2",
+  "test_records": [
+    "100",
+    "103",
+    "105",
+    "111",
+    "113",
+    "117",
+    "121",
+    "123",
+    "200",
+    "202",
+    "210",
+    "212",
+    "213",
+    "214",
+    "219",
+    "221",
+    "222",
+    "228",
+    "231",
+    "232",
+    "233",
+    "234"
+  ],
+  "train_records": [
+    "101",
+    "106",
+    "108",
+    "109",
+    "114",
+    "115",
+    "116",
+    "118",
+    "119",
+    "122",
+    "124",
+    "201",
+    "203",
+    "207",
+    "208",
+    "209",
+    "220",
+    "230"
+  ]
+}

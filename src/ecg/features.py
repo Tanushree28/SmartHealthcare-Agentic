@@ -89,10 +89,48 @@ def pool_morphology(X: np.ndarray, factor: int = DEFAULT_POOL_FACTOR) -> np.ndar
     return arr.reshape(n_beats, length // factor, factor).mean(axis=2)
 
 
+#: Beats either side of the current one used for the robust rhythm baseline.
+#: Wider than LOCAL_RR_HALF_WINDOW because this is meant to describe the
+#: patient's underlying rhythm, not the immediate neighbourhood.
+BASELINE_RR_HALF_WINDOW: int = 25
+
+
+def rolling_baseline_rr(
+    intervals: np.ndarray,
+    half_window: int = BASELINE_RR_HALF_WINDOW,
+) -> np.ndarray:
+    """A rhythm reference that a run of ectopic beats cannot drag around.
+
+    ``global_rr`` is the mean RR over an entire record, so a single stretch of
+    bigeminy shifts the reference for every beat in that patient -- including
+    beats nowhere near the episode. Prematurity is relative to the rhythm
+    *around* a beat, so the reference should be local and resistant to outliers.
+
+    A rolling median is both. On a steady rhythm it equals the mean, so this
+    changes nothing where nothing is wrong.
+    """
+    values = np.asarray(intervals, dtype=np.float64)
+
+    if values.ndim != 1:
+        raise ValueError(f"intervals must be 1-D, got shape {values.shape}")
+    if half_window < 0:
+        raise ValueError(f"half_window must be >= 0, got {half_window}")
+    if values.size == 0:
+        return np.empty(0, dtype=np.float64)
+
+    out = np.empty(values.size, dtype=np.float64)
+    for i in range(values.size):
+        lo = max(i - half_window, 0)
+        hi = min(i + half_window + 1, values.size)
+        out[i] = np.median(values[lo:hi])
+    return out
+
+
 def rr_features(
     r_peaks: np.ndarray,
     fs: int = config.FS,
     half_window: int = LOCAL_RR_HALF_WINDOW,
+    robust: bool = False,
 ) -> tuple[np.ndarray, np.ndarray]:
     """RR-interval features for every beat that has a neighbour on both sides.
 
@@ -128,18 +166,26 @@ def rr_features(
         hi = min(beat_i + half_window, intervals.size)
         local[out_i] = intervals[lo:hi].mean()
 
-    # Record-level average. Computed from this record's own beats only, so it
-    # carries no information from any other record or split.
-    global_rr = float(intervals.mean())
+    # The rhythm a beat is judged "early" against. Computed from this record's
+    # own beats only, so it carries no information from any other record or
+    # split.
+    #
+    # robust=False keeps the Phase 1b definition -- the record-level mean -- so
+    # published results stay reproducible. robust=True uses a rolling median,
+    # which an arrhythmic episode cannot drag around; see rolling_baseline_rr.
+    if robust:
+        baseline = rolling_baseline_rr(intervals)[keep - 1]
+    else:
+        baseline = np.full(keep.size, float(intervals.mean()))
 
     features = np.column_stack(
         [
             pre,
             post,
             local,
-            np.full(keep.size, global_rr),
-            pre / global_rr,
-            post / global_rr,
+            baseline,
+            pre / baseline,
+            post / baseline,
         ]
     ).astype(np.float32)
 

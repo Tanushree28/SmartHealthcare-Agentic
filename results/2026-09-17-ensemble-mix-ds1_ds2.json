@@ -1,0 +1,352 @@
+{
+  "phase": "1g",
+  "question": "does mixing losses beat five copies of one?",
+  "command": "scripts/train_ensemble_mix.py --beats-dir /content/physionet-data/processed/mitdb-ds12/beats --out-dir /content/physionet-data/processed/mitdb-ds12 --device cuda --epochs 50 --folds 5",
+  "generated": "2026-09-17",
+  "generated_utc": "2026-09-17T12:22:14+00:00",
+  "selection": {
+    "metric": "pooled-OOF macro average precision over N/S/V/F",
+    "candidates_fixed_in_advance": [
+      "A_focal_only",
+      "B_focal_plain",
+      "C_focal_plain_oversample",
+      "D_all_four",
+      "E_plain_oversample"
+    ],
+    "selected": "D_all_four",
+    "reference": "A_focal_only",
+    "note": "Selected on DS1 out-of-fold predictions before DS2 was scored."
+  },
+  "arms": {
+    "focal": {
+      "loss": "focal",
+      "oversample": false,
+      "note": "Phase 1d winner; the current ensemble is 5 of these",
+      "folds": [
+        {
+          "fold": 0,
+          "best_epoch": 12,
+          "macro_f1_headline": 0.5012,
+          "seconds": 40.5
+        },
+        {
+          "fold": 1,
+          "best_epoch": 20,
+          "macro_f1_headline": 0.3941,
+          "seconds": 53.0
+        },
+        {
+          "fold": 2,
+          "best_epoch": 9,
+          "macro_f1_headline": 0.5308,
+          "seconds": 35.0
+        },
+        {
+          "fold": 3,
+          "best_epoch": 8,
+          "macro_f1_headline": 0.7611,
+          "seconds": 31.5
+        },
+        {
+          "fold": 4,
+          "best_epoch": 4,
+          "macro_f1_headline": 0.5009,
+          "seconds": 25.2
+        }
+      ]
+    },
+    "plain": {
+      "loss": "plain",
+      "oversample": false,
+      "note": "no imbalance handling; ranks S 2nd best",
+      "folds": [
+        {
+          "fold": 0,
+          "best_epoch": 9,
+          "macro_f1_headline": 0.4635,
+          "seconds": 30.7
+        },
+        {
+          "fold": 1,
+          "best_epoch": 18,
+          "macro_f1_headline": 0.4275,
+          "seconds": 46.7
+        },
+        {
+          "fold": 2,
+          "best_epoch": 17,
+          "macro_f1_headline": 0.5462,
+          "seconds": 48.0
+        },
+        {
+          "fold": 3,
+          "best_epoch": 23,
+          "macro_f1_headline": 0.7077,
+          "seconds": 57.5
+        },
+        {
+          "fold": 4,
+          "best_epoch": 8,
+          "macro_f1_headline": 0.5868,
+          "seconds": 30.5
+        }
+      ]
+    },
+    "weighted": {
+      "loss": "weighted",
+      "oversample": false,
+      "note": "class-weighted CE, capped",
+      "folds": [
+        {
+          "fold": 0,
+          "best_epoch": 12,
+          "macro_f1_headline": 0.5213,
+          "seconds": 35.3
+        },
+        {
+          "fold": 1,
+          "best_epoch": 7,
+          "macro_f1_headline": 0.3858,
+          "seconds": 27.6
+        },
+        {
+          "fold": 2,
+          "best_epoch": 17,
+          "macro_f1_headline": 0.553,
+          "seconds": 48.9
+        },
+        {
+          "fold": 3,
+          "best_epoch": 7,
+          "macro_f1_headline": 0.77,
+          "seconds": 28.2
+        },
+        {
+          "fold": 4,
+          "best_epoch": 4,
+          "macro_f1_headline": 0.5058,
+          "seconds": 22.9
+        }
+      ]
+    },
+    "oversample": {
+      "loss": "plain",
+      "oversample": true,
+      "note": "rare beats resampled; ranks S best",
+      "folds": [
+        {
+          "fold": 0,
+          "best_epoch": 7,
+          "macro_f1_headline": 0.5183,
+          "seconds": 26.7
+        },
+        {
+          "fold": 1,
+          "best_epoch": 6,
+          "macro_f1_headline": 0.3792,
+          "seconds": 25.5
+        },
+        {
+          "fold": 2,
+          "best_epoch": 8,
+          "macro_f1_headline": 0.5172,
+          "seconds": 30.7
+        },
+        {
+          "fold": 3,
+          "best_epoch": 1,
+          "macro_f1_headline": 0.7232,
+          "seconds": 16.8
+        },
+        {
+          "fold": 4,
+          "best_epoch": 9,
+          "macro_f1_headline": 0.4042,
+          "seconds": 32.6
+        }
+      ]
+    }
+  },
+  "oof": {
+    "n_beats": 50955,
+    "n_folds": 5,
+    "seed": 20260916,
+    "scores": {
+      "A_focal_only": {
+        "members": [
+          "focal"
+        ],
+        "n_models": 5,
+        "macro_average_precision": 0.5213,
+        "s_average_precision": 0.2606,
+        "v_average_precision": 0.8303,
+        "f_average_precision": 0.0084,
+        "headline_macro_f1": 0.5288,
+        "s_recall": 0.6554,
+        "s_precision": 0.2974,
+        "brier": 0.25879,
+        "classwise_ece": 0.12519
+      },
+      "B_focal_plain": {
+        "members": [
+          "focal",
+          "plain"
+        ],
+        "n_models": 10,
+        "macro_average_precision": 0.5551,
+        "s_average_precision": 0.4053,
+        "v_average_precision": 0.8187,
+        "f_average_precision": 0.0082,
+        "headline_macro_f1": 0.5326,
+        "s_recall": 0.5366,
+        "s_precision": 0.427,
+        "brier": 0.15953,
+        "classwise_ece": 0.07187
+      },
+      "C_focal_plain_oversample": {
+        "members": [
+          "focal",
+          "plain",
+          "oversample"
+        ],
+        "n_models": 15,
+        "macro_average_precision": 0.5571,
+        "s_average_precision": 0.3771,
+        "v_average_precision": 0.8554,
+        "f_average_precision": 0.0086,
+        "headline_macro_f1": 0.5442,
+        "s_recall": 0.5864,
+        "s_precision": 0.4022,
+        "brier": 0.18564,
+        "classwise_ece": 0.07991
+      },
+      "D_all_four": {
+        "members": [
+          "focal",
+          "plain",
+          "weighted",
+          "oversample"
+        ],
+        "n_models": 20,
+        "macro_average_precision": 0.5832,
+        "s_average_precision": 0.4674,
+        "v_average_precision": 0.8707,
+        "f_average_precision": 0.0078,
+        "headline_macro_f1": 0.5545,
+        "s_recall": 0.6066,
+        "s_precision": 0.4259,
+        "brier": 0.1827,
+        "classwise_ece": 0.07792
+      },
+      "E_plain_oversample": {
+        "members": [
+          "plain",
+          "oversample"
+        ],
+        "n_models": 10,
+        "macro_average_precision": 0.557,
+        "s_average_precision": 0.3901,
+        "v_average_precision": 0.8436,
+        "f_average_precision": 0.0091,
+        "headline_macro_f1": 0.5437,
+        "s_recall": 0.5483,
+        "s_precision": 0.4363,
+        "brier": 0.1786,
+        "classwise_ece": 0.05956
+      }
+    }
+  },
+  "ds2": {
+    "n_beats": 49646,
+    "scores": {
+      "A_focal_only": {
+        "members": [
+          "focal"
+        ],
+        "n_models": 5,
+        "macro_average_precision": 0.5989,
+        "s_average_precision": 0.4053,
+        "v_average_precision": 0.9676,
+        "f_average_precision": 0.0287,
+        "headline_macro_f1": 0.6123,
+        "s_recall": 0.841,
+        "s_precision": 0.4095,
+        "brier": 0.2376,
+        "classwise_ece": 0.14312
+      },
+      "B_focal_plain": {
+        "members": [
+          "focal",
+          "plain"
+        ],
+        "n_models": 10,
+        "macro_average_precision": 0.5942,
+        "s_average_precision": 0.3875,
+        "v_average_precision": 0.967,
+        "f_average_precision": 0.0277,
+        "headline_macro_f1": 0.5689,
+        "s_recall": 0.4385,
+        "s_precision": 0.4217,
+        "brier": 0.14227,
+        "classwise_ece": 0.08384
+      },
+      "C_focal_plain_oversample": {
+        "members": [
+          "focal",
+          "plain",
+          "oversample"
+        ],
+        "n_models": 15,
+        "macro_average_precision": 0.5761,
+        "s_average_precision": 0.3244,
+        "v_average_precision": 0.9675,
+        "f_average_precision": 0.0192,
+        "headline_macro_f1": 0.5371,
+        "s_recall": 0.3426,
+        "s_precision": 0.3227,
+        "brier": 0.16117,
+        "classwise_ece": 0.08474
+      },
+      "D_all_four": {
+        "members": [
+          "focal",
+          "plain",
+          "weighted",
+          "oversample"
+        ],
+        "n_models": 20,
+        "macro_average_precision": 0.5838,
+        "s_average_precision": 0.3519,
+        "v_average_precision": 0.9693,
+        "f_average_precision": 0.0202,
+        "headline_macro_f1": 0.5554,
+        "s_recall": 0.4232,
+        "s_precision": 0.3554,
+        "brier": 0.15932,
+        "classwise_ece": 0.08517
+      },
+      "E_plain_oversample": {
+        "members": [
+          "plain",
+          "oversample"
+        ],
+        "n_models": 10,
+        "macro_average_precision": 0.5622,
+        "s_average_precision": 0.2818,
+        "v_average_precision": 0.9619,
+        "f_average_precision": 0.0131,
+        "headline_macro_f1": 0.5027,
+        "s_recall": 0.2037,
+        "s_precision": 0.2718,
+        "brier": 0.14959,
+        "classwise_ece": 0.05676
+      }
+    }
+  },
+  "environment": {
+    "numpy": "2.1.3",
+    "python": "3.13.15",
+    "device": "cuda",
+    "torch": "2.11.0+cu128"
+  }
+}

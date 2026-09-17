@@ -1,0 +1,1870 @@
+{
+  "arms": {
+    "beat_focal": "Phase 1d winner, reproduced as reference",
+    "beat_robust_rr": "rolling-median rhythm reference",
+    "rhythm_context": "BiLSTM over +/-2 neighbouring beats",
+    "rhythm_context_robust": "rhythm context AND robust reference"
+  },
+  "command": "scripts/train_nn_v2.py --beats-dir /content/physionet-data/processed/mitdb-ds12/beats --out-dir /content/physionet-data/processed/mitdb-ds12 --device cuda --epochs 30 --seeds 3 --folds 5",
+  "context": 2,
+  "cv": {
+    "beat_focal": {
+      "arm": "beat_focal",
+      "ci_macro_f1": [
+        0.45354949918306975,
+        0.6062589813330134
+      ],
+      "ci_s_f1": [
+        0.20966997192729112,
+        0.5346356709998409
+      ],
+      "loss": "focal",
+      "mean_macro_f1": 0.528197644698648,
+      "mean_s_f1": 0.37188309969687433,
+      "mean_s_recall": 0.5269061617550971,
+      "median_best_epoch": 9,
+      "model": "beat",
+      "note": "Phase 1d winner, reproduced as reference",
+      "robust_rr": false,
+      "runs": [
+        {
+          "best_epoch": 11,
+          "fold": 0,
+          "macro_f1_headline": 0.48527865557660055,
+          "s_f1": 0.24519230769230765,
+          "s_precision": 0.375,
+          "s_recall": 0.18214285714285713,
+          "seconds": 30.2,
+          "seed": 20260916,
+          "v_recall": 0.8990825688073395
+        },
+        {
+          "best_epoch": 9,
+          "fold": 1,
+          "macro_f1_headline": 0.35148867161279573,
+          "s_f1": 0.21237458193979933,
+          "s_precision": 0.13065843621399176,
+          "s_recall": 0.5669642857142857,
+          "seconds": 25.1,
+          "seed": 20260916,
+          "v_recall": 0.9073529411764706
+        },
+        {
+          "best_epoch": 2,
+          "fold": 2,
+          "macro_f1_headline": 0.5148584482237586,
+          "s_f1": 0.1282051282051282,
+          "s_precision": 0.15151515151515152,
+          "s_recall": 0.1111111111111111,
+          "seconds": 16.0,
+          "seed": 20260916,
+          "v_recall": 0.9540983606557377
+        },
+        {
+          "best_epoch": 9,
+          "fold": 3,
+          "macro_f1_headline": 0.8084724936616813,
+          "s_f1": 0.8883312421580928,
+          "s_precision": 0.8613138686131386,
+          "s_recall": 0.917098445595855,
+          "seconds": 26.2,
+          "seed": 20260916,
+          "v_recall": 0.9961240310077519
+        },
+        {
+          "best_epoch": 13,
+          "fold": 4,
+          "macro_f1_headline": 0.4695804202613646,
+          "s_f1": 0.16470588235294117,
+          "s_precision": 0.09090909090909091,
+          "s_recall": 0.875,
+          "seconds": 33.3,
+          "seed": 20260916,
+          "v_recall": 0.8582677165354331
+        },
+        {
+          "best_epoch": 4,
+          "fold": 0,
+          "macro_f1_headline": 0.4416473532681072,
+          "s_f1": 0.00861141011840689,
+          "s_precision": 0.004338394793926247,
+          "s_recall": 0.5714285714285714,
+          "seconds": 17.3,
+          "seed": 20260917,
+          "v_recall": 0.7562056737588653
+        },
+        {
+          "best_epoch": 9,
+          "fold": 1,
+          "macro_f1_headline": 0.388184257740682,
+          "s_f1": 0.09655172413793103,
+          "s_precision": 0.2916666666666667,
+          "s_recall": 0.05785123966942149,
+          "seconds": 25.7,
+          "seed": 20260917,
+          "v_recall": 0.893167701863354
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.8225004928127021,
+          "s_f1": 0.7160493827160495,
+          "s_precision": 0.7767857142857143,
+          "s_recall": 0.6641221374045801,
+          "seconds": 20.7,
+          "seed": 20260917,
+          "v_recall": 0.9156398104265403
+        },
+        {
+          "best_epoch": 14,
+          "fold": 3,
+          "macro_f1_headline": 0.42458698397776573,
+          "s_f1": 0.125,
+          "s_precision": 0.08726003490401396,
+          "s_recall": 0.22026431718061673,
+          "seconds": 35.0,
+          "seed": 20260917,
+          "v_recall": 0.7990654205607477
+        },
+        {
+          "best_epoch": 4,
+          "fold": 4,
+          "macro_f1_headline": 0.6685602367907161,
+          "s_f1": 0.8112543962485345,
+          "s_precision": 0.8737373737373737,
+          "s_recall": 0.7571115973741794,
+          "seconds": 18.4,
+          "seed": 20260917,
+          "v_recall": 0.8065068493150684
+        },
+        {
+          "best_epoch": 5,
+          "fold": 0,
+          "macro_f1_headline": 0.5002327481233656,
+          "s_f1": 0.2553763440860215,
+          "s_precision": 0.1660839160839161,
+          "s_recall": 0.5523255813953488,
+          "seconds": 20.2,
+          "seed": 20260918,
+          "v_recall": 0.8549346016646849
+        },
+        {
+          "best_epoch": 4,
+          "fold": 1,
+          "macro_f1_headline": 0.7166195494939682,
+          "s_f1": 0.8160377358490566,
+          "s_precision": 0.7521739130434782,
+          "s_recall": 0.8917525773195877,
+          "seconds": 17.7,
+          "seed": 20260918,
+          "v_recall": 0.9702380952380952
+        },
+        {
+          "best_epoch": 1,
+          "fold": 2,
+          "macro_f1_headline": 0.3067705901230213,
+          "s_f1": 0.011501597444089457,
+          "s_precision": 0.006211180124223602,
+          "s_recall": 0.07758620689655173,
+          "seconds": 14.0,
+          "seed": 20260918,
+          "v_recall": 0.8286334056399133
+        },
+        {
+          "best_epoch": 9,
+          "fold": 3,
+          "macro_f1_headline": 0.56086925981147,
+          "s_f1": 0.3517587939698492,
+          "s_precision": 0.2777777777777778,
+          "s_recall": 0.4794520547945205,
+          "seconds": 26.4,
+          "seed": 20260918,
+          "v_recall": 0.8318227593152064
+        },
+        {
+          "best_epoch": 12,
+          "fold": 4,
+          "macro_f1_headline": 0.46331450900172183,
+          "s_f1": 0.7472959685349065,
+          "s_precision": 0.604133545310016,
+          "s_recall": 0.979381443298969,
+          "seconds": 30.4,
+          "seed": 20260918,
+          "v_recall": 0.979296066252588
+        }
+      ],
+      "std_macro_f1": 0.15810795248682327
+    },
+    "beat_robust_rr": {
+      "arm": "beat_robust_rr",
+      "ci_macro_f1": [
+        0.468516535015027,
+        0.6028552762236223
+      ],
+      "ci_s_f1": [
+        0.24300147605696124,
+        0.5021899334213089
+      ],
+      "loss": "focal",
+      "mean_macro_f1": 0.5340782536482144,
+      "mean_s_f1": 0.3715673180996836,
+      "mean_s_recall": 0.5193462064519917,
+      "median_best_epoch": 11,
+      "model": "beat",
+      "note": "rolling-median rhythm reference",
+      "robust_rr": true,
+      "runs": [
+        {
+          "best_epoch": 11,
+          "fold": 0,
+          "macro_f1_headline": 0.5168193108821942,
+          "s_f1": 0.3312577833125778,
+          "s_precision": 0.25430210325047803,
+          "s_recall": 0.475,
+          "seconds": 28.6,
+          "seed": 20260916,
+          "v_recall": 0.901241230437129
+        },
+        {
+          "best_epoch": 16,
+          "fold": 1,
+          "macro_f1_headline": 0.4094224885902946,
+          "s_f1": 0.23541048466864492,
+          "s_precision": 0.15120711562897077,
+          "s_recall": 0.53125,
+          "seconds": 36.9,
+          "seed": 20260916,
+          "v_recall": 0.9441176470588235
+        },
+        {
+          "best_epoch": 17,
+          "fold": 2,
+          "macro_f1_headline": 0.5380557267636594,
+          "s_f1": 0.21538461538461537,
+          "s_precision": 0.35,
+          "s_recall": 0.15555555555555556,
+          "seconds": 41.0,
+          "seed": 20260916,
+          "v_recall": 0.9459016393442623
+        },
+        {
+          "best_epoch": 18,
+          "fold": 3,
+          "macro_f1_headline": 0.7272139938234854,
+          "s_f1": 0.7020933977455717,
+          "s_precision": 0.9276595744680851,
+          "s_recall": 0.5647668393782384,
+          "seconds": 40.8,
+          "seed": 20260916,
+          "v_recall": 0.9961240310077519
+        },
+        {
+          "best_epoch": 13,
+          "fold": 4,
+          "macro_f1_headline": 0.4140610538330652,
+          "s_f1": 0.22857142857142856,
+          "s_precision": 0.14814814814814814,
+          "s_recall": 0.5,
+          "seconds": 34.8,
+          "seed": 20260916,
+          "v_recall": 0.84251968503937
+        },
+        {
+          "best_epoch": 4,
+          "fold": 0,
+          "macro_f1_headline": 0.43609603365261973,
+          "s_f1": 0.009737098344693282,
+          "s_precision": 0.004901960784313725,
+          "s_recall": 0.7142857142857143,
+          "seconds": 18.6,
+          "seed": 20260917,
+          "v_recall": 0.7721631205673759
+        },
+        {
+          "best_epoch": 9,
+          "fold": 1,
+          "macro_f1_headline": 0.4560269827678781,
+          "s_f1": 0.05223880597014926,
+          "s_precision": 0.047619047619047616,
+          "s_recall": 0.05785123966942149,
+          "seconds": 26.5,
+          "seed": 20260917,
+          "v_recall": 0.8124223602484472
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.8134814607685285,
+          "s_f1": 0.7235772357723576,
+          "s_precision": 0.7739130434782608,
+          "s_recall": 0.6793893129770993,
+          "seconds": 21.8,
+          "seed": 20260917,
+          "v_recall": 0.9725118483412323
+        },
+        {
+          "best_epoch": 12,
+          "fold": 3,
+          "macro_f1_headline": 0.5045621712786941,
+          "s_f1": 0.294314381270903,
+          "s_precision": 0.2371967654986523,
+          "s_recall": 0.3876651982378855,
+          "seconds": 32.6,
+          "seed": 20260917,
+          "v_recall": 0.9626168224299065
+        },
+        {
+          "best_epoch": 14,
+          "fold": 4,
+          "macro_f1_headline": 0.6176218844418884,
+          "s_f1": 0.6324324324324325,
+          "s_precision": 0.8268551236749117,
+          "s_recall": 0.5120350109409191,
+          "seconds": 34.4,
+          "seed": 20260917,
+          "v_recall": 0.7705479452054794
+        },
+        {
+          "best_epoch": 5,
+          "fold": 0,
+          "macro_f1_headline": 0.5032793688814168,
+          "s_f1": 0.18594104308390022,
+          "s_precision": 0.11549295774647887,
+          "s_recall": 0.47674418604651164,
+          "seconds": 21.3,
+          "seed": 20260918,
+          "v_recall": 0.9227110582639715
+        },
+        {
+          "best_epoch": 4,
+          "fold": 1,
+          "macro_f1_headline": 0.7043341621792318,
+          "s_f1": 0.7156673114119922,
+          "s_precision": 0.5727554179566563,
+          "s_recall": 0.9536082474226805,
+          "seconds": 18.8,
+          "seed": 20260918,
+          "v_recall": 0.9662698412698413
+        },
+        {
+          "best_epoch": 3,
+          "fold": 2,
+          "macro_f1_headline": 0.32241442551337324,
+          "s_f1": 0.07468879668049792,
+          "s_precision": 0.072,
+          "s_recall": 0.07758620689655173,
+          "seconds": 18.6,
+          "seed": 20260918,
+          "v_recall": 0.8481561822125814
+        },
+        {
+          "best_epoch": 9,
+          "fold": 3,
+          "macro_f1_headline": 0.6237947998881461,
+          "s_f1": 0.5789473684210527,
+          "s_precision": 0.4700854700854701,
+          "s_recall": 0.7534246575342466,
+          "seconds": 27.9,
+          "seed": 20260918,
+          "v_recall": 0.8721047331319235
+        },
+        {
+          "best_epoch": 12,
+          "fold": 4,
+          "macro_f1_headline": 0.42398994145873936,
+          "s_f1": 0.5932475884244373,
+          "s_precision": 0.4310747663551402,
+          "s_recall": 0.9510309278350515,
+          "seconds": 31.7,
+          "seed": 20260918,
+          "v_recall": 0.9523809523809523
+        }
+      ],
+      "std_macro_f1": 0.13734040513649096
+    },
+    "rhythm_context": {
+      "arm": "rhythm_context",
+      "ci_macro_f1": [
+        0.47060537938375213,
+        0.5962572737813502
+      ],
+      "ci_s_f1": [
+        0.2171799906724395,
+        0.44610999206984314
+      ],
+      "loss": "focal",
+      "mean_macro_f1": 0.5332708766643006,
+      "mean_s_f1": 0.3339843350588297,
+      "mean_s_recall": 0.4942293786636697,
+      "median_best_epoch": 7,
+      "model": "rhythm",
+      "note": "BiLSTM over +/-2 neighbouring beats",
+      "robust_rr": false,
+      "runs": [
+        {
+          "best_epoch": 11,
+          "fold": 0,
+          "macro_f1_headline": 0.478506878123827,
+          "s_f1": 0.26275115919629055,
+          "s_precision": 0.23160762942779292,
+          "s_recall": 0.30357142857142855,
+          "seconds": 74.7,
+          "seed": 20260916,
+          "v_recall": 0.7452779276848354
+        },
+        {
+          "best_epoch": 28,
+          "fold": 1,
+          "macro_f1_headline": 0.38142124015521933,
+          "s_f1": 0.282574568288854,
+          "s_precision": 0.17142857142857143,
+          "s_recall": 0.8035714285714286,
+          "seconds": 120.2,
+          "seed": 20260916,
+          "v_recall": 0.8191176470588235
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.5451363470745738,
+          "s_f1": 0.21686746987951808,
+          "s_precision": 0.23684210526315788,
+          "s_recall": 0.2,
+          "seconds": 55.0,
+          "seed": 20260916,
+          "v_recall": 0.9442622950819672
+        },
+        {
+          "best_epoch": 15,
+          "fold": 3,
+          "macro_f1_headline": 0.7453334652111172,
+          "s_f1": 0.652931854199683,
+          "s_precision": 0.8408163265306122,
+          "s_recall": 0.533678756476684,
+          "seconds": 94.2,
+          "seed": 20260916,
+          "v_recall": 0.9903100775193798
+        },
+        {
+          "best_epoch": 4,
+          "fold": 4,
+          "macro_f1_headline": 0.5368304336009055,
+          "s_f1": 0.43750000000000006,
+          "s_precision": 0.2916666666666667,
+          "s_recall": 0.875,
+          "seconds": 50.7,
+          "seed": 20260916,
+          "v_recall": 0.937007874015748
+        },
+        {
+          "best_epoch": 3,
+          "fold": 0,
+          "macro_f1_headline": 0.4642492141374531,
+          "s_f1": 0.010282776349614397,
+          "s_precision": 0.005188067444876783,
+          "s_recall": 0.5714285714285714,
+          "seconds": 43.5,
+          "seed": 20260917,
+          "v_recall": 0.8306737588652482
+        },
+        {
+          "best_epoch": 19,
+          "fold": 1,
+          "macro_f1_headline": 0.4396588846107159,
+          "s_f1": 0.04,
+          "s_precision": 0.10344827586206896,
+          "s_recall": 0.024793388429752067,
+          "seconds": 109.1,
+          "seed": 20260917,
+          "v_recall": 0.924223602484472
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.7031912598417129,
+          "s_f1": 0.5870967741935484,
+          "s_precision": 0.5083798882681564,
+          "s_recall": 0.6946564885496184,
+          "seconds": 54.9,
+          "seed": 20260917,
+          "v_recall": 0.8388625592417062
+        },
+        {
+          "best_epoch": 9,
+          "fold": 3,
+          "macro_f1_headline": 0.48961382162598166,
+          "s_f1": 0.2164383561643836,
+          "s_precision": 0.15705765407554673,
+          "s_recall": 0.34801762114537443,
+          "seconds": 71.3,
+          "seed": 20260917,
+          "v_recall": 0.8551401869158879
+        },
+        {
+          "best_epoch": 7,
+          "fold": 4,
+          "macro_f1_headline": 0.6366152200607854,
+          "s_f1": 0.6674937965260546,
+          "s_precision": 0.7707736389684814,
+          "s_recall": 0.5886214442013129,
+          "seconds": 61.4,
+          "seed": 20260917,
+          "v_recall": 0.7191780821917808
+        },
+        {
+          "best_epoch": 15,
+          "fold": 0,
+          "macro_f1_headline": 0.5124123384760699,
+          "s_f1": 0.15283842794759828,
+          "s_precision": 0.12237762237762238,
+          "s_recall": 0.20348837209302326,
+          "seconds": 94.6,
+          "seed": 20260918,
+          "v_recall": 0.9619500594530321
+        },
+        {
+          "best_epoch": 7,
+          "fold": 1,
+          "macro_f1_headline": 0.698626070606318,
+          "s_f1": 0.5704584040747028,
+          "s_precision": 0.4253164556962025,
+          "s_recall": 0.865979381443299,
+          "seconds": 59.8,
+          "seed": 20260918,
+          "v_recall": 0.9722222222222222
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.32941297959458676,
+          "s_f1": 0.05187319884726225,
+          "s_precision": 0.03896103896103896,
+          "s_recall": 0.07758620689655173,
+          "seconds": 53.8,
+          "seed": 20260918,
+          "v_recall": 0.8915401301518439
+        },
+        {
+          "best_epoch": 3,
+          "fold": 3,
+          "macro_f1_headline": 0.6349430596763865,
+          "s_f1": 0.339622641509434,
+          "s_precision": 0.2589928057553957,
+          "s_recall": 0.4931506849315068,
+          "seconds": 45.9,
+          "seed": 20260918,
+          "v_recall": 0.8741188318227593
+        },
+        {
+          "best_epoch": 11,
+          "fold": 4,
+          "macro_f1_headline": 0.40311193716885685,
+          "s_f1": 0.5210355987055016,
+          "s_precision": 0.37971698113207547,
+          "s_recall": 0.8298969072164949,
+          "seconds": 77.5,
+          "seed": 20260918,
+          "v_recall": 0.968944099378882
+        }
+      ],
+      "std_macro_f1": 0.126146619790679
+    },
+    "rhythm_context_robust": {
+      "arm": "rhythm_context_robust",
+      "ci_macro_f1": [
+        0.46751985134430163,
+        0.5786844931678615
+      ],
+      "ci_s_f1": [
+        0.23415179674512615,
+        0.44597082111906516
+      ],
+      "loss": "focal",
+      "mean_macro_f1": 0.5236861596607496,
+      "mean_s_f1": 0.34186131101318534,
+      "mean_s_recall": 0.4733203587472719,
+      "median_best_epoch": 8,
+      "model": "rhythm",
+      "note": "rhythm context AND robust reference",
+      "robust_rr": true,
+      "runs": [
+        {
+          "best_epoch": 9,
+          "fold": 0,
+          "macro_f1_headline": 0.4569002338880771,
+          "s_f1": 0.14084507042253522,
+          "s_precision": 0.16129032258064516,
+          "s_recall": 0.125,
+          "seconds": 68.1,
+          "seed": 20260916,
+          "v_recall": 0.9001618996222343
+        },
+        {
+          "best_epoch": 15,
+          "fold": 1,
+          "macro_f1_headline": 0.38925555536809364,
+          "s_f1": 0.24259927797833936,
+          "s_precision": 0.14470284237726097,
+          "s_recall": 0.75,
+          "seconds": 93.6,
+          "seed": 20260916,
+          "v_recall": 0.8926470588235295
+        },
+        {
+          "best_epoch": 8,
+          "fold": 2,
+          "macro_f1_headline": 0.5594516013207169,
+          "s_f1": 0.2619047619047619,
+          "s_precision": 0.28205128205128205,
+          "s_recall": 0.24444444444444444,
+          "seconds": 69.0,
+          "seed": 20260916,
+          "v_recall": 0.9836065573770492
+        },
+        {
+          "best_epoch": 13,
+          "fold": 3,
+          "macro_f1_headline": 0.6846335388141918,
+          "s_f1": 0.49909584086799275,
+          "s_precision": 0.8263473053892215,
+          "s_recall": 0.35751295336787564,
+          "seconds": 87.3,
+          "seed": 20260916,
+          "v_recall": 0.9903100775193798
+        },
+        {
+          "best_epoch": 5,
+          "fold": 4,
+          "macro_f1_headline": 0.5266443856174756,
+          "s_f1": 0.2857142857142857,
+          "s_precision": 0.17647058823529413,
+          "s_recall": 0.75,
+          "seconds": 56.3,
+          "seed": 20260916,
+          "v_recall": 0.8976377952755905
+        },
+        {
+          "best_epoch": 10,
+          "fold": 0,
+          "macro_f1_headline": 0.4435135174452761,
+          "s_f1": 0.011441647597254006,
+          "s_precision": 0.0057670126874279125,
+          "s_recall": 0.7142857142857143,
+          "seconds": 72.3,
+          "seed": 20260917,
+          "v_recall": 0.8173758865248227
+        },
+        {
+          "best_epoch": 10,
+          "fold": 1,
+          "macro_f1_headline": 0.45172449336502457,
+          "s_f1": 0.1090909090909091,
+          "s_precision": 0.20454545454545456,
+          "s_recall": 0.0743801652892562,
+          "seconds": 74.3,
+          "seed": 20260917,
+          "v_recall": 0.9093167701863354
+        },
+        {
+          "best_epoch": 11,
+          "fold": 2,
+          "macro_f1_headline": 0.6911412496930774,
+          "s_f1": 0.5275362318840581,
+          "s_precision": 0.4252336448598131,
+          "s_recall": 0.6946564885496184,
+          "seconds": 81.2,
+          "seed": 20260917,
+          "v_recall": 0.9137440758293839
+        },
+        {
+          "best_epoch": 12,
+          "fold": 3,
+          "macro_f1_headline": 0.5661055808174145,
+          "s_f1": 0.5019505851755527,
+          "s_precision": 0.35608856088560886,
+          "s_recall": 0.8502202643171806,
+          "seconds": 85.2,
+          "seed": 20260917,
+          "v_recall": 0.7149532710280374
+        },
+        {
+          "best_epoch": 5,
+          "fold": 4,
+          "macro_f1_headline": 0.5882244526170692,
+          "s_f1": 0.5386666666666666,
+          "s_precision": 0.689419795221843,
+          "s_recall": 0.4420131291028446,
+          "seconds": 54.5,
+          "seed": 20260917,
+          "v_recall": 0.7756849315068494
+        },
+        {
+          "best_epoch": 6,
+          "fold": 0,
+          "macro_f1_headline": 0.5137758781747263,
+          "s_f1": 0.17834394904458598,
+          "s_precision": 0.14046822742474915,
+          "s_recall": 0.2441860465116279,
+          "seconds": 59.0,
+          "seed": 20260918,
+          "v_recall": 0.9702734839476813
+        },
+        {
+          "best_epoch": 6,
+          "fold": 1,
+          "macro_f1_headline": 0.6374603560234656,
+          "s_f1": 0.6294117647058823,
+          "s_precision": 0.7328767123287672,
+          "s_recall": 0.5515463917525774,
+          "seconds": 57.0,
+          "seed": 20260918,
+          "v_recall": 0.9761904761904762
+        },
+        {
+          "best_epoch": 5,
+          "fold": 2,
+          "macro_f1_headline": 0.33026654260522703,
+          "s_f1": 0.058823529411764705,
+          "s_precision": 0.05128205128205128,
+          "s_recall": 0.06896551724137931,
+          "seconds": 55.1,
+          "seed": 20260918,
+          "v_recall": 0.9154013015184381
+        },
+        {
+          "best_epoch": 3,
+          "fold": 3,
+          "macro_f1_headline": 0.6296486694981499,
+          "s_f1": 0.41818181818181815,
+          "s_precision": 0.6216216216216216,
+          "s_recall": 0.3150684931506849,
+          "seconds": 47.3,
+          "seed": 20260918,
+          "v_recall": 0.9133937562940584
+        },
+        {
+          "best_epoch": 4,
+          "fold": 4,
+          "macro_f1_headline": 0.38654633966325674,
+          "s_f1": 0.7243133265513733,
+          "s_precision": 0.5983193277310924,
+          "s_recall": 0.9175257731958762,
+          "seconds": 50.5,
+          "seed": 20260918,
+          "v_recall": 0.989648033126294
+        }
+      ],
+      "std_macro_f1": 0.11206668204616164
+    }
+  },
+  "device": "cuda",
+  "environment": {
+    "numpy": "2.1.3",
+    "python": "3.13.15",
+    "torch": "2.11.0+cu128"
+  },
+  "paired_vs_reference": {
+    "beat_robust_rr": {
+      "macro_f1_headline": {
+        "consistent": false,
+        "differences": [
+          0.0315,
+          0.0579,
+          0.0232,
+          -0.0813,
+          -0.0555,
+          -0.0056,
+          0.0678,
+          -0.009,
+          0.08,
+          -0.0509,
+          0.003,
+          -0.0123,
+          0.0156,
+          0.0629,
+          -0.0393
+        ],
+        "max_difference": 0.08,
+        "mean_difference": 0.0059,
+        "min_difference": -0.0813,
+        "n_folds": 15,
+        "wins": 8
+      },
+      "s_f1": {
+        "consistent": false,
+        "differences": [
+          0.0861,
+          0.023,
+          0.0872,
+          -0.1862,
+          0.0639,
+          0.0011,
+          -0.0443,
+          0.0075,
+          0.1693,
+          -0.1788,
+          -0.0694,
+          -0.1004,
+          0.0632,
+          0.2272,
+          -0.154
+        ],
+        "max_difference": 0.2272,
+        "mean_difference": -0.0003,
+        "min_difference": -0.1862,
+        "n_folds": 15,
+        "wins": 9
+      },
+      "s_precision": {
+        "consistent": false,
+        "differences": [
+          -0.1207,
+          0.0205,
+          0.1985,
+          0.0663,
+          0.0572,
+          0.0006,
+          -0.244,
+          -0.0029,
+          0.1499,
+          -0.0469,
+          -0.0506,
+          -0.1794,
+          0.0658,
+          0.1923,
+          -0.1731
+        ],
+        "max_difference": 0.1985,
+        "mean_difference": -0.0044,
+        "min_difference": -0.244,
+        "n_folds": 15,
+        "wins": 8
+      },
+      "s_recall": {
+        "consistent": false,
+        "differences": [
+          0.2929,
+          -0.0357,
+          0.0444,
+          -0.3523,
+          -0.375,
+          0.1429,
+          0.0,
+          0.0153,
+          0.1674,
+          -0.2451,
+          -0.0756,
+          0.0619,
+          0.0,
+          0.274,
+          -0.0284
+        ],
+        "max_difference": 0.2929,
+        "mean_difference": -0.0076,
+        "min_difference": -0.375,
+        "n_folds": 15,
+        "wins": 7
+      }
+    },
+    "rhythm_context": {
+      "macro_f1_headline": {
+        "consistent": false,
+        "differences": [
+          -0.0068,
+          0.0299,
+          0.0303,
+          -0.0631,
+          0.0673,
+          0.0226,
+          0.0515,
+          -0.1193,
+          0.065,
+          -0.0319,
+          0.0122,
+          -0.018,
+          0.0226,
+          0.0741,
+          -0.0602
+        ],
+        "max_difference": 0.0741,
+        "mean_difference": 0.0051,
+        "min_difference": -0.1193,
+        "n_folds": 15,
+        "wins": 9
+      },
+      "s_f1": {
+        "consistent": false,
+        "differences": [
+          0.0176,
+          0.0702,
+          0.0887,
+          -0.2354,
+          0.2728,
+          0.0017,
+          -0.0566,
+          -0.129,
+          0.0914,
+          -0.1438,
+          -0.1025,
+          -0.2456,
+          0.0404,
+          -0.0121,
+          -0.2263
+        ],
+        "max_difference": 0.2728,
+        "mean_difference": -0.0379,
+        "min_difference": -0.2456,
+        "n_folds": 15,
+        "wins": 7
+      },
+      "s_precision": {
+        "consistent": false,
+        "differences": [
+          -0.1434,
+          0.0408,
+          0.0853,
+          -0.0205,
+          0.2008,
+          0.0008,
+          -0.1882,
+          -0.2684,
+          0.0698,
+          -0.103,
+          -0.0437,
+          -0.3269,
+          0.0327,
+          -0.0188,
+          -0.2244
+        ],
+        "max_difference": 0.2008,
+        "mean_difference": -0.0605,
+        "min_difference": -0.3269,
+        "n_folds": 15,
+        "wins": 6
+      },
+      "s_recall": {
+        "consistent": false,
+        "differences": [
+          0.1214,
+          0.2366,
+          0.0889,
+          -0.3834,
+          0.0,
+          0.0,
+          -0.0331,
+          0.0305,
+          0.1278,
+          -0.1685,
+          -0.3488,
+          -0.0258,
+          0.0,
+          0.0137,
+          -0.1495
+        ],
+        "max_difference": 0.2366,
+        "mean_difference": -0.0327,
+        "min_difference": -0.3834,
+        "n_folds": 15,
+        "wins": 6
+      }
+    },
+    "rhythm_context_robust": {
+      "macro_f1_headline": {
+        "consistent": false,
+        "differences": [
+          -0.0284,
+          0.0378,
+          0.0446,
+          -0.1238,
+          0.0571,
+          0.0019,
+          0.0635,
+          -0.1314,
+          0.1415,
+          -0.0803,
+          0.0135,
+          -0.0792,
+          0.0235,
+          0.0688,
+          -0.0768
+        ],
+        "max_difference": 0.1415,
+        "mean_difference": -0.0045,
+        "min_difference": -0.1314,
+        "n_folds": 15,
+        "wins": 9
+      },
+      "s_f1": {
+        "consistent": false,
+        "differences": [
+          -0.1043,
+          0.0302,
+          0.1337,
+          -0.3892,
+          0.121,
+          0.0028,
+          0.0125,
+          -0.1885,
+          0.377,
+          -0.2726,
+          -0.077,
+          -0.1866,
+          0.0473,
+          0.0664,
+          -0.023
+        ],
+        "max_difference": 0.377,
+        "mean_difference": -0.03,
+        "min_difference": -0.3892,
+        "n_folds": 15,
+        "wins": 8
+      },
+      "s_precision": {
+        "consistent": false,
+        "differences": [
+          -0.2137,
+          0.014,
+          0.1305,
+          -0.035,
+          0.0856,
+          0.0014,
+          -0.0871,
+          -0.3516,
+          0.2688,
+          -0.1843,
+          -0.0256,
+          -0.0193,
+          0.0451,
+          0.3438,
+          -0.0058
+        ],
+        "max_difference": 0.3438,
+        "mean_difference": -0.0022,
+        "min_difference": -0.3516,
+        "n_folds": 15,
+        "wins": 7
+      },
+      "s_recall": {
+        "consistent": false,
+        "differences": [
+          -0.0571,
+          0.183,
+          0.1333,
+          -0.5596,
+          -0.125,
+          0.1429,
+          0.0165,
+          0.0305,
+          0.63,
+          -0.3151,
+          -0.3081,
+          -0.3402,
+          -0.0086,
+          -0.1644,
+          -0.0619
+        ],
+        "max_difference": 0.63,
+        "mean_difference": -0.0536,
+        "min_difference": -0.5596,
+        "n_folds": 15,
+        "wins": 6
+      }
+    }
+  },
+  "phase": "1e",
+  "results": [
+    {
+      "accuracy": 0.8635,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          38282,
+          4649,
+          1245,
+          19,
+          1
+        ],
+        [
+          160,
+          1612,
+          64,
+          0,
+          0
+        ],
+        [
+          192,
+          53,
+          2972,
+          2,
+          0
+        ],
+        [
+          372,
+          1,
+          14,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "beat_focal",
+      "macro_f1": 0.4222,
+      "macro_f1_headline": 0.5278,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.534,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9202,
+          "precision": 0.9814,
+          "recall": 0.8662,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.3955,
+          "precision": 0.2553,
+          "recall": 0.878,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.7904,
+          "precision": 0.691,
+          "recall": 0.9233,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0049,
+          "precision": 0.0455,
+          "recall": 0.0026,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.8799,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          39245,
+          2081,
+          434,
+          2434,
+          2
+        ],
+        [
+          386,
+          1352,
+          81,
+          17,
+          0
+        ],
+        [
+          80,
+          52,
+          3049,
+          38,
+          0
+        ],
+        [
+          329,
+          0,
+          22,
+          37,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "beat_focal+ensemble",
+      "macro_f1": 0.4721,
+      "macro_f1_headline": 0.5902,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.5334,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9318,
+          "precision": 0.9801,
+          "recall": 0.888,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.5082,
+          "precision": 0.3879,
+          "recall": 0.7364,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.8953,
+          "precision": 0.8488,
+          "recall": 0.9472,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0254,
+          "precision": 0.0146,
+          "recall": 0.0954,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.8238,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          37263,
+          4591,
+          420,
+          1921,
+          1
+        ],
+        [
+          1149,
+          579,
+          105,
+          3,
+          0
+        ],
+        [
+          112,
+          36,
+          3049,
+          21,
+          1
+        ],
+        [
+          344,
+          0,
+          39,
+          5,
+          0
+        ],
+        [
+          1,
+          1,
+          4,
+          1,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "beat_robust_rr",
+      "macro_f1": 0.3916,
+      "macro_f1_headline": 0.4895,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4237,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.8972,
+          "precision": 0.9587,
+          "recall": 0.8431,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.1644,
+          "precision": 0.1112,
+          "recall": 0.3154,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.892,
+          "precision": 0.843,
+          "recall": 0.9472,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0043,
+          "precision": 0.0026,
+          "recall": 0.0129,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.8303,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          37692,
+          2646,
+          611,
+          3246,
+          1
+        ],
+        [
+          1207,
+          402,
+          196,
+          31,
+          0
+        ],
+        [
+          58,
+          55,
+          3100,
+          6,
+          0
+        ],
+        [
+          289,
+          8,
+          63,
+          28,
+          0
+        ],
+        [
+          1,
+          0,
+          4,
+          2,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "beat_robust_rr+ensemble",
+      "macro_f1": 0.3886,
+      "macro_f1_headline": 0.4858,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4214,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9034,
+          "precision": 0.9604,
+          "recall": 0.8528,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.1625,
+          "precision": 0.1292,
+          "recall": 0.219,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.8619,
+          "precision": 0.7801,
+          "recall": 0.963,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0151,
+          "precision": 0.0085,
+          "recall": 0.0722,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.8921,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          40285,
+          1685,
+          1832,
+          394,
+          0
+        ],
+        [
+          806,
+          960,
+          68,
+          2,
+          0
+        ],
+        [
+          151,
+          4,
+          3040,
+          24,
+          0
+        ],
+        [
+          359,
+          0,
+          24,
+          5,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "rhythm_context",
+      "macro_f1": 0.4244,
+      "macro_f1_headline": 0.5305,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4783,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9391,
+          "precision": 0.9683,
+          "recall": 0.9115,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.4281,
+          "precision": 0.3624,
+          "recall": 0.5229,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.7425,
+          "precision": 0.6117,
+          "recall": 0.9444,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0123,
+          "precision": 0.0118,
+          "recall": 0.0129,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.922,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          41790,
+          1758,
+          430,
+          215,
+          3
+        ],
+        [
+          872,
+          907,
+          57,
+          0,
+          0
+        ],
+        [
+          111,
+          24,
+          3072,
+          12,
+          0
+        ],
+        [
+          368,
+          0,
+          17,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "rhythm_context+ensemble",
+      "macro_f1": 0.4542,
+      "macro_f1_headline": 0.5677,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4803,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.957,
+          "precision": 0.9687,
+          "recall": 0.9456,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.4009,
+          "precision": 0.3373,
+          "recall": 0.494,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.9033,
+          "precision": 0.8574,
+          "recall": 0.9543,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0097,
+          "precision": 0.013,
+          "recall": 0.0077,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.9207,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          41956,
+          764,
+          992,
+          482,
+          2
+        ],
+        [
+          1045,
+          733,
+          51,
+          7,
+          0
+        ],
+        [
+          127,
+          50,
+          3020,
+          22,
+          0
+        ],
+        [
+          349,
+          0,
+          37,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "rhythm_context_robust",
+      "macro_f1": 0.4439,
+      "macro_f1_headline": 0.5549,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4584,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9571,
+          "precision": 0.965,
+          "recall": 0.9493,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.4333,
+          "precision": 0.4738,
+          "recall": 0.3992,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.8246,
+          "precision": 0.7355,
+          "recall": 0.9382,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0044,
+          "precision": 0.0039,
+          "recall": 0.0052,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    },
+    {
+      "accuracy": 0.9248,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          42045,
+          1495,
+          364,
+          289,
+          3
+        ],
+        [
+          928,
+          841,
+          48,
+          19,
+          0
+        ],
+        [
+          86,
+          91,
+          3027,
+          15,
+          0
+        ],
+        [
+          362,
+          2,
+          22,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "rhythm_context_robust+ensemble",
+      "macro_f1": 0.453,
+      "macro_f1_headline": 0.5663,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.471,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9597,
+          "precision": 0.9683,
+          "recall": 0.9513,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.3944,
+          "precision": 0.3462,
+          "recall": 0.4581,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.9053,
+          "precision": 0.8728,
+          "recall": 0.9404,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0056,
+          "precision": 0.0062,
+          "recall": 0.0052,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    }
+  ],
+  "seeds": [
+    20260916,
+    20260917,
+    20260918
+  ],
+  "status": "complete",
+  "test_ci": {
+    "beat_focal": {
+      "ci_macro_f1_headline": [
+        0.522962417355469,
+        0.5329805252681171
+      ]
+    },
+    "beat_focal+ensemble": {
+      "ci_macro_f1_headline": [
+        0.5850301345296843,
+        0.5946166489926512
+      ]
+    },
+    "beat_robust_rr": {
+      "ci_macro_f1_headline": [
+        0.48600468843612626,
+        0.493395826827743
+      ]
+    },
+    "beat_robust_rr+ensemble": {
+      "ci_macro_f1_headline": [
+        0.48090679647424533,
+        0.48994606020809134
+      ]
+    },
+    "rhythm_context": {
+      "ci_macro_f1_headline": [
+        0.5247620815816422,
+        0.5361699839112972
+      ]
+    },
+    "rhythm_context+ensemble": {
+      "ci_macro_f1_headline": [
+        0.5614522061248165,
+        0.5731295384317647
+      ]
+    },
+    "rhythm_context_robust": {
+      "ci_macro_f1_headline": [
+        0.5493986605536099,
+        0.5601747184997564
+      ]
+    },
+    "rhythm_context_robust+ensemble": {
+      "ci_macro_f1_headline": [
+        0.5604594506642474,
+        0.5713709611413527
+      ]
+    }
+  },
+  "winner": "beat_focal"
+}
