@@ -1,10 +1,8 @@
 # Smart Healthcare — Phase 0/1 direct dependencies.
 # Pinned for reproducibility. Python 3.13 (arm64) — see PlanDoc/PLAN.md.
 #
-# Preprocessing plus the classical baseline classifier. Deep-learning packages
-# (torch) and resampling packages (imbalanced-learn) are deliberately absent --
-# they belong to later phases. matplotlib arrives transitively via wfdb and is
-# not imported by any module here.
+# Preprocessing plus the classical baseline classifier. Resampling packages
+# (imbalanced-learn) are deliberately absent -- they belong to later phases.
 
 numpy==2.3.3
 scipy==1.16.2
@@ -16,3 +14,15 @@ scikit-learn==1.7.2
 
 # Test runner
 pytest==8.4.2
+
+# Phase 1d: the hybrid neural classifier. CPU wheels; verified 2026-09-16 to
+# install on Python 3.13 arm64 with no source build. Pulls in filelock, jinja2,
+# MarkupSafe, networkx, sympy, mpmath and setuptools transitively -- recorded
+# here so this file is not read as the complete installed set (cf. Deviation 5).
+torch==2.14.0
+
+# Calibration diagnosis: figures written to results/figures/. matplotlib was
+# already present transitively via wfdb; it is pinned here because src/ecg/plots.py
+# now imports it directly, and an undeclared transitive dependency that source
+# depends on is the kind of thing that breaks on the next unrelated upgrade.
+matplotlib==3.11.1

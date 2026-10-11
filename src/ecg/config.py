@@ -66,6 +66,12 @@ WINDOW_SECONDS: tuple[int, ...] = (5, 10)
 #: invalidate every saved label array and any model trained against them.
 AAMI_CLASSES: tuple[str, ...] = ("N", "S", "V", "F", "Q")
 
+#: Classes the headline metric averages over. Q is excluded: it has 8 training
+#: beats and 7 in DS2 under the DS1/DS2 protocol, so its F1 is noise, and
+#: averaged over five classes that noise moves the number that ranks every
+#: model. Q is still trained on and still reported -- just not in the ranking.
+HEADLINE_CLASSES: tuple[str, ...] = ("N", "S", "V", "F")
+
 # ---------------------------------------------------------------------------
 # Splits (PDF 2.8)
 # ---------------------------------------------------------------------------
@@ -85,6 +91,11 @@ ALL_RECORDS: tuple[str, ...] = (
 
 DEFAULT_SPLIT_SEED: int = 20260826
 DEFAULT_SPLIT_FRACTIONS: tuple[float, float, float] = (0.7, 0.15, 0.15)
+
+#: Seed for Phase 1d -- CV fold assignment and network initialisation. Separate
+#: from DEFAULT_SPLIT_SEED so re-running Phase 1d cannot disturb the DS1/DS2
+#: assignment that Phase 1b's published numbers rest on.
+PHASE_1D_SEED: int = 20260916
 
 # ---------------------------------------------------------------------------
 # Paths

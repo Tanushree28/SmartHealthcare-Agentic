@@ -39,6 +39,7 @@ class Evaluation:
     per_class: tuple[ClassMetrics, ...]
     accuracy: float
     macro_recall: float
+    macro_f1: float
     n_test: int
     label: str = ""
 
@@ -51,6 +52,19 @@ class Evaluation:
             if metrics.name == name:
                 return metrics.recall
         raise KeyError(name)
+
+    def macro_f1_of(self, names) -> float:
+        """Mean F1 over the named classes only.
+
+        Used for the headline ranking, which excludes Q -- see
+        ``config.HEADLINE_CLASSES``.
+        """
+        by_name = {m.name: m for m in self.per_class}
+        missing = [n for n in names if n not in by_name]
+        if missing:
+            raise KeyError(f"unknown classes {missing}")
+        chosen = [by_name[n].f1 for n in names]
+        return float(np.mean(chosen)) if chosen else 0.0
 
     def to_dict(self) -> dict:
         return {
@@ -70,6 +84,14 @@ class Evaluation:
                 for m in self.per_class
             ],
             "macro_recall": round(self.macro_recall, 4),
+            "macro_f1": round(self.macro_f1, 4),
+            "macro_f1_headline": round(self.macro_f1_of(config.HEADLINE_CLASSES), 4),
+            "macro_f1_headline_note": (
+                "Averaged over N/S/V/F only. Q is excluded: 8 training beats "
+                "and 7 in DS2 make its F1 noise that would move the ranking. "
+                "Macro recall alone mis-ranks models -- see "
+                "results/2026-08-27-baseline-ds1_ds2.md section 3."
+            ),
             "accuracy": round(self.accuracy, 4),
             "accuracy_note": (
                 "Uninformative on this dataset: normal beats are ~86% of the "
@@ -122,6 +144,7 @@ def evaluate(
         per_class=tuple(per_class),
         accuracy=float((true == pred).mean()),
         macro_recall=float(np.mean([m.recall for m in present])) if present else 0.0,
+        macro_f1=float(np.mean([m.f1 for m in present])) if present else 0.0,
         n_test=int(true.size),
         label=label,
     )
@@ -143,7 +166,10 @@ def format_report(result: Evaluation) -> str:
         )
 
     lines.append("")
-    lines.append(f"macro-average recall : {result.macro_recall:.3f}   <- the number that matters")
+    headline = result.macro_f1_of(config.HEADLINE_CLASSES)
+    lines.append(f"macro-average recall : {result.macro_recall:.3f}   <- sensitivity, all present classes")
+    lines.append(f"macro-average F1     : {result.macro_f1:.3f}   <- all present classes")
+    lines.append(f"macro F1 (N/S/V/F)   : {headline:.3f}   <- the ranking metric, Q excluded")
     lines.append(f"accuracy             : {result.accuracy:.3f}   <- uninformative, ~86% of beats are normal")
 
     lines.append("")

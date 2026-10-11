@@ -1,0 +1,40 @@
+{
+  "folds": [
+    [
+      "118",
+      "207",
+      "208",
+      "215",
+      "223"
+    ],
+    [
+      "109",
+      "115",
+      "201",
+      "203",
+      "220"
+    ],
+    [
+      "106",
+      "112",
+      "114",
+      "124"
+    ],
+    [
+      "119",
+      "122",
+      "205",
+      "209"
+    ],
+    [
+      "101",
+      "108",
+      "116",
+      "230"
+    ]
+  ],
+  "group_unit": "record",
+  "n_folds": 5,
+  "note": "Grouped by record: no patient appears on both sides of any fold. DS2 records are excluded by construction. Replaces the single 4-record validation split, which held only 81 S beats.",
+  "seed": 20260916
+}

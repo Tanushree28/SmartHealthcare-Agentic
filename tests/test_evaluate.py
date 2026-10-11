@@ -130,3 +130,95 @@ def test_json_round_trip(tmp_path):
     assert len(payload["results"]) == 1
     assert payload["results"][0]["label"] == "run"
     assert payload["results"][0]["confusion_matrix_note"].startswith("rows = true")
+
+
+# ---------------------------------------------------------------------------
+# macro-F1 (Phase 1d)
+#
+# Macro recall alone mis-ranks models: it ranked the worst of six Phase 1b
+# models first, because over-predicting a rare class carries no penalty. See
+# results/2026-08-27-baseline-ds1_ds2.md section 3.
+# ---------------------------------------------------------------------------
+
+
+def test_macro_f1_averages_over_present_classes_only():
+    # 4 classes present, Q absent. Perfect prediction -> every present F1 is 1.0.
+    y_true = np.array([0, 0, 1, 2, 3])
+    y_pred = np.array([0, 0, 1, 2, 3])
+
+    result = evaluate(y_true, y_pred)
+
+    assert result.macro_f1 == pytest.approx(1.0)
+    # Q has zero support and must not drag the average to 0.8.
+    assert result.recall_of("Q") == 0.0
+
+
+def test_macro_f1_is_hand_computable():
+    # N: 2 true, both found -> recall 1.0. Predicted-as-N is 3 -> precision 2/3.
+    #    F1 = 2 * (2/3) * 1 / (2/3 + 1) = 0.8
+    # S: 1 true, missed -> recall 0.0, F1 0.0
+    # V: 1 true, found -> recall 1.0, precision 1.0, F1 1.0
+    y_true = np.array([0, 0, 1, 2])
+    y_pred = np.array([0, 0, 0, 2])
+
+    result = evaluate(y_true, y_pred)
+
+    assert result.macro_f1 == pytest.approx((0.8 + 0.0 + 1.0) / 3)
+
+
+def test_macro_f1_appears_in_json_payload():
+    result = evaluate(np.array([0, 1]), np.array([0, 1]))
+
+    assert "macro_f1" in result.to_dict()
+
+
+def test_headline_macro_f1_excludes_q():
+    """Q has 7 beats in DS2. Its own F1 must not enter the ranking metric.
+
+    The one Q beat is predicted as N, so N's precision drops to 0.5 and its F1
+    to 2/3 -- that cost is real and stays in the headline. What the headline
+    drops is Q's own F1 of 0.0, which is noise from a 7-beat class.
+    """
+    y_true = np.array([0, 1, 2, 3, 4])
+    y_pred = np.array([0, 1, 2, 3, 0])
+
+    result = evaluate(y_true, y_pred)
+
+    headline = result.macro_f1_of(config.HEADLINE_CLASSES)
+    assert headline == pytest.approx((2 / 3 + 1.0 + 1.0 + 1.0) / 4)
+
+    # All five classes have support here, so macro_f1 carries Q's zero.
+    assert result.macro_f1 == pytest.approx((2 / 3 + 1.0 + 1.0 + 1.0 + 0.0) / 5)
+    assert headline > result.macro_f1
+
+
+def test_macro_f1_of_rejects_an_unknown_class():
+    result = evaluate(np.array([0, 1]), np.array([0, 1]))
+
+    with pytest.raises(KeyError):
+        result.macro_f1_of(("N", "Z"))
+
+
+def test_headline_macro_f1_appears_in_json_payload():
+    result = evaluate(np.array([0, 1]), np.array([0, 1]))
+
+    assert "macro_f1_headline" in result.to_dict()
+
+
+def test_macro_f1_differs_from_macro_recall_on_over_prediction():
+    """Reproduces the lda/rr_only trap: a rare class caught by spraying
+    predictions. Recall is flattered; F1 is not."""
+    y_true = np.array([0] * 20 + [1])
+    y_pred = np.array([1] * 21)
+
+    result = evaluate(y_true, y_pred)
+
+    assert result.recall_of("S") == pytest.approx(1.0)
+    assert result.macro_f1 < result.macro_recall
+
+
+def test_format_report_shows_both_macro_numbers():
+    text = format_report(evaluate(np.array([0, 1, 2]), np.array([0, 1, 2])))
+
+    assert "macro-average F1" in text
+    assert "macro F1 (N/S/V/F)" in text
