@@ -1,7 +1,8 @@
 # Phase 1f — Calibration diagnosis and probability contract
 
-**Status:** design approved in conversation 2026-09-17. Stage A implemented same
-day. Stage B not started.
+**Status:** design approved in conversation 2026-09-17. Stage A implemented and
+run the same day (`results/2026-09-17-calibration-diagnosis-ds1_ds2.json`).
+Stage B still not started as of 2026-10-11.
 
 **Naming:** `PLAN.md` reserves Phase 2 for MIMIC-III. Like 1d and 1e, this work
 was requested directly rather than arising from `PLAN.md`, so it takes the next

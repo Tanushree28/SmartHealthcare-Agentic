@@ -1,0 +1,160 @@
+# Glossary for the chat agent: short, plain definitions the chat may quote.
+# DRAFT - needs professor review. Read by src/agentic/glossary.py, which
+# refuses an entry without a source. `terms` lists the clinical words an entry
+# may be cited for (see src/agentic/verifier.py).
+
+status = "draft - needs professor review"
+
+[[entry]]
+id = "G1"
+term = "N beat"
+definition = "A normal beat, or a beat the AAMI scheme groups with normal ones, such as bundle branch block beats."
+source = "ANSI/AAMI EC57 beat classes, as mapped in src/mit_bih/labels.py"
+terms = ["beat:N"]
+
+[[entry]]
+id = "G2"
+term = "S beat"
+definition = "A supraventricular ectopic beat: an early beat that starts above the ventricles, for example in the atria."
+source = "ANSI/AAMI EC57 beat classes, as mapped in src/mit_bih/labels.py"
+terms = ["beat:S"]
+
+[[entry]]
+id = "G3"
+term = "V beat"
+definition = "A ventricular ectopic beat: an early beat that starts in the ventricles, often called a PVC."
+source = "ANSI/AAMI EC57 beat classes, as mapped in src/mit_bih/labels.py"
+terms = ["beat:V"]
+
+[[entry]]
+id = "G4"
+term = "F beat"
+definition = "A fusion beat: a normal beat and a ventricular beat happening at the same moment and merging."
+source = "ANSI/AAMI EC57 beat classes, as mapped in src/mit_bih/labels.py"
+terms = ["beat:F"]
+
+[[entry]]
+id = "G5"
+term = "Q beat"
+definition = "An unclassifiable beat: one the AAMI scheme cannot place in the other four classes."
+source = "ANSI/AAMI EC57 beat classes, as mapped in src/mit_bih/labels.py"
+terms = ["beat:Q"]
+
+[[entry]]
+id = "G6"
+term = "R peak"
+definition = "The tallest point of a heartbeat on the ECG. Beat positions are R-peak positions."
+source = "Standard ECG terminology; PlanDoc/Project_Glossary.pdf"
+terms = ["beat"]
+
+[[entry]]
+id = "G7"
+term = "RR interval"
+definition = "The time between two R peaks. Heart rate in beats per minute is 60 divided by the RR interval in seconds."
+source = "Standard ECG terminology; PlanDoc/Project_Glossary.pdf"
+terms = ["heart_rate"]
+
+[[entry]]
+id = "G8"
+term = "Run"
+definition = "Three or more beats of the same kind in a row, for example 3 V beats in a row."
+source = "Project definition (src/agentic/heart_agent.py)"
+terms = ["run"]
+
+[[entry]]
+id = "G9"
+term = "Non-sustained VT"
+definition = "Three or more V beats in a row, faster than 100 per minute, that stop by themselves within 30 seconds."
+source = "2017 AHA/ACC/HRS ventricular arrhythmia guideline (NSVT definition); to confirm"
+terms = ["run", "beat:V", "heart_rate"]
+
+[[entry]]
+id = "G10"
+term = "Ectopic beat"
+definition = "A beat that starts somewhere other than the heart's normal pacemaker. S beats and V beats are ectopic."
+source = "Standard ECG terminology; PlanDoc/Project_Glossary.pdf"
+terms = ["beat:S", "beat:V"]
+
+[[entry]]
+id = "G11"
+term = "Tachycardia and bradycardia"
+definition = "Tachycardia means a heart rate above 100 per minute; bradycardia means below 60 per minute, for adults at rest."
+source = "Standard adult definitions; to confirm"
+terms = ["heart_rate"]
+
+[[entry]]
+id = "G12"
+term = "Potassium"
+definition = "A blood salt the heart needs for a steady rhythm. Low or high potassium can make irregular beats more likely."
+source = "MedlinePlus, potassium blood test; to confirm"
+terms = ["potassium"]
+
+[[entry]]
+id = "G13"
+term = "Lactate"
+definition = "A blood marker that rises when tissues are short of oxygen or under strain. Above 2 mmol/L is usually called raised."
+source = "Sepsis-3 (Singer et al., JAMA 2016); to confirm"
+terms = ["lactate"]
+
+[[entry]]
+id = "G14"
+term = "Troponin"
+definition = "A protein released into the blood when heart muscle is injured."
+source = "Fourth Universal Definition of Myocardial Infarction (2018); to confirm"
+terms = ["troponin_t", "troponin_i"]
+
+[[entry]]
+id = "G15"
+term = "Mean arterial pressure (MAP)"
+definition = "The average pressure in the arteries over one heartbeat. A common minimum target in very ill patients is 65 mmHg."
+source = "Surviving Sepsis Campaign MAP target; to confirm"
+terms = ["mbp"]
+
+[[entry]]
+id = "G16"
+term = "SpO2"
+definition = "Oxygen saturation: the share of hemoglobin carrying oxygen, measured with a finger clip."
+source = "MedlinePlus, pulse oximetry; to confirm"
+terms = ["spo2"]
+
+[[entry]]
+id = "G17"
+term = "The 24-hour mark"
+definition = "The index time: 24 hours after ICU admission. The chart agent uses only data recorded before it."
+source = "This project (PlanDoc/agentic_with_fe.md)"
+terms = []
+
+[[entry]]
+id = "G18"
+term = "Risk score"
+definition = "The Demo model's score, from the first 24 hours, for in-hospital death. It was trained on a few dozen Demo patients and is not validated."
+source = "This project (src/mimic_iii, PlanDoc/agentic_with_fe.md)"
+terms = ["risk_score"]
+
+[[entry]]
+id = "G19"
+term = "Uncalibrated score"
+definition = "The ECG model's scores rank beats from more to less likely to be a class, but they are not probabilities."
+source = "This project (Phase 1f calibration diagnosis)"
+terms = ["beat"]
+
+[[entry]]
+id = "G20"
+term = "Held-out and trained-on records"
+definition = "A held-out ECG record was never used to train the model, so results on it are an honest test. A trained-on record was used in training, so results on it look better than they are."
+source = "This project (DS1/DS2 split)"
+terms = []
+
+[[entry]]
+id = "G21"
+term = "Simulated case"
+definition = "The ECG and the chart come from two different people, from MIT-BIH and MIMIC-III. The pairing is for demonstration only."
+source = "This project (PlanDoc/agentic_with_fe.md)"
+terms = []
+
+[[entry]]
+id = "G22"
+term = "Fact-check"
+definition = "Every AI-written sentence is checked against the findings it cites; anything not backed by them is rejected."
+source = "This project (src/agentic/verifier.py)"
+terms = []

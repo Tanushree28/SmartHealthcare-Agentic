@@ -1,0 +1,14 @@
+{
+  "_comment": "INVENTED example for demonstration. Not a real patient and not taken from MIMIC-III. Fields left out are filled in by the model's imputer and listed in the output.",
+  "age": 72,
+  "age_over_89": 0,
+  "gender": "M",
+  "admission_type": "EMERGENCY",
+  "first_careunit": "CCU",
+  "heart_rate_mean": 96.0, "heart_rate_min": 78.0, "heart_rate_max": 121.0, "heart_rate_last": 101.0, "heart_rate_count": 24,
+  "sbp_mean": 104.0, "sbp_min": 82.0, "sbp_max": 131.0, "sbp_last": 99.0, "sbp_count": 24,
+  "spo2_mean": 95.0, "spo2_min": 89.0, "spo2_max": 99.0, "spo2_last": 94.0, "spo2_count": 24,
+  "creatinine_mean": 1.6, "creatinine_min": 1.4, "creatinine_max": 1.8, "creatinine_last": 1.8, "creatinine_count": 2,
+  "lactate_mean": 2.9, "lactate_min": 2.1, "lactate_max": 3.6, "lactate_last": 3.6, "lactate_count": 2,
+  "troponin_t_mean": 0.42, "troponin_t_min": 0.30, "troponin_t_max": 0.55, "troponin_t_last": 0.55, "troponin_t_count": 2
+}

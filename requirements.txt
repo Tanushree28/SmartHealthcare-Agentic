@@ -22,7 +22,7 @@ pytest==8.4.2
 torch==2.14.0
 
 # Calibration diagnosis: figures written to results/figures/. matplotlib was
-# already present transitively via wfdb; it is pinned here because src/ecg/plots.py
+# already present transitively via wfdb; it is pinned here because src/mit_bih/plots.py
 # now imports it directly, and an undeclared transitive dependency that source
 # depends on is the kind of thing that breaks on the next unrelated upgrade.
 matplotlib==3.11.1

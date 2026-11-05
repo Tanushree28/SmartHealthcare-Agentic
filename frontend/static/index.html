@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Agent Pipeline Demo</title>
+<meta name="description" content="Watch one heartbeat recording and one ICU chart go through the agent pipeline: model, agents, rules, a fact-checked report and a chat. Runs on this computer only.">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ctext y='13' font-size='13' fill='%23d03b3b'%3E%E2%99%A5%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/app.css">
+<script src="/static/app.js" defer></script>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Smart Healthcare · research demo · runs on this computer only</p>
+    <h1>Agent pipeline</h1>
+    <p id="banner" class="banner" role="status">Pick an ECG recording, an ICU stay, or both, then press Run.</p>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="controls card" aria-label="Choose a case">
+    <form id="case-form" class="case-form">
+      <label class="field">ECG recording
+        <select id="record"><option value="">none</option></select>
+      </label>
+      <label class="field narrow">Start (s)
+        <input id="start" type="number" min="0" step="1" value="0" inputmode="numeric">
+      </label>
+      <label class="field narrow">Length
+        <select id="seconds">
+          <option value="10">10 s</option>
+          <option value="20" selected>20 s</option>
+          <option value="30">30 s</option>
+          <option value="60">60 s</option>
+        </select>
+      </label>
+      <label class="field">Beat positions
+        <select id="peaks">
+          <option value="annotation">cardiologist's marks</option>
+          <option value="detected">automatic detector</option>
+        </select>
+      </label>
+      <label class="field wide">ICU stay (MIMIC-III)
+        <select id="stay"><option value="">none</option></select>
+      </label>
+      <div class="buttons">
+        <button id="run" type="submit" class="primary">▶ Run</button>
+        <button id="step" type="button" title="Reveal one stage per click">Step ▸</button>
+      </div>
+    </form>
+    <div class="status-row">
+      <span id="llm-chip" class="chip">LLM: checking…</span>
+      <span id="record-tag" class="hint"></span>
+    </div>
+    <p id="error" class="error" role="alert" hidden></p>
+  </section>
+
+  <div class="layout">
+    <section id="stages" class="stages" aria-label="Pipeline stages"></section>
+
+    <aside class="side">
+      <section class="card chat" aria-label="Chat">
+        <h2>Ask about this case</h2>
+        <p class="hint">Answers come only from this case's findings and the glossary, and are fact-checked. Treatment, diagnosis and outcome questions are refused.</p>
+        <ol id="chat-log" class="chat-log" aria-live="polite"></ol>
+        <p id="thinking" class="hint" hidden></p>
+        <form id="chat-form" class="chat-form">
+          <input id="question" maxlength="500" autocomplete="off" placeholder="Run a case first" disabled>
+          <button id="ask" type="submit" disabled>Ask</button>
+        </form>
+      </section>
+
+      <section class="card" aria-label="Real outcome">
+        <h2>Real outcome</h2>
+        <p class="hint">Display only: the agents, the report and the chat never see it.</p>
+        <button id="reveal" type="button" disabled>Reveal real outcome</button>
+        <p id="outcome" class="outcome" hidden></p>
+      </section>
+
+      <section class="card blocked" aria-label="Fusion">
+        <h2>Team brain (fusion): BLOCKED</h2>
+        <p class="hint">Training it needs an ECG and a chart from the same patient at the same time. MIT-BIH and MIMIC-III share no patients, so nothing here is fused.</p>
+      </section>
+    </aside>
+  </div>
+</main>
+
+<footer class="wrap foot">
+  Research demo. Not a diagnosis and not for patient care. Beat classes come from the ECG model, not a cardiologist; rules and glossary are drafts awaiting review.
+</footer>
+<div id="tooltip" class="tooltip" hidden></div>
+</body>
+</html>

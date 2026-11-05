@@ -1,0 +1,148 @@
+{
+  "beats_from": "saved Phase 1 beats",
+  "calibration": "Uncalibrated. Phase 1f measured mean predicted P(S) at 3.2x and P(F) at 14.5x the true class rates. Treat the scores as a ranking of beats, not as probabilities, until Phase 1f Stage B fits a correction.",
+  "ensemble": "D_all_four",
+  "headline_macro_f1": 0.5674277575359739,
+  "is_full_ds2": false,
+  "metrics": {
+    "accuracy": 0.9021,
+    "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+    "classes": [
+      "N",
+      "S",
+      "V",
+      "F",
+      "Q"
+    ],
+    "confusion_matrix": [
+      [
+        39108,
+        875,
+        336,
+        1819,
+        0
+      ],
+      [
+        874,
+        738,
+        169,
+        0,
+        0
+      ],
+      [
+        135,
+        45,
+        3016,
+        4,
+        0
+      ],
+      [
+        357,
+        0,
+        29,
+        1,
+        0
+      ],
+      [
+        1,
+        0,
+        6,
+        0,
+        0
+      ]
+    ],
+    "confusion_matrix_note": "rows = true class, columns = predicted class",
+    "label": "D_all_four on DS2",
+    "macro_f1": 0.4539,
+    "macro_f1_headline": 0.5674,
+    "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+    "macro_recall": 0.4575,
+    "n_test": 47513,
+    "per_class": [
+      {
+        "class": "N",
+        "f1": 0.9468,
+        "precision": 0.9662,
+        "recall": 0.9281,
+        "support": 42138
+      },
+      {
+        "class": "S",
+        "f1": 0.4292,
+        "precision": 0.4451,
+        "recall": 0.4144,
+        "support": 1781
+      },
+      {
+        "class": "V",
+        "f1": 0.8928,
+        "precision": 0.8481,
+        "recall": 0.9425,
+        "support": 3200
+      },
+      {
+        "class": "F",
+        "f1": 0.0009,
+        "precision": 0.0005,
+        "recall": 0.0026,
+        "support": 387
+      },
+      {
+        "class": "Q",
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 7
+      }
+    ]
+  },
+  "n_beats": 47513,
+  "n_models": 20,
+  "provenance": {
+    "environment": {
+      "numpy": "2.3.3",
+      "pandas": "2.3.3",
+      "python": "3.13.9",
+      "scipy": "1.16.2",
+      "sklearn": "1.7.2",
+      "torch": "2.14.0"
+    },
+    "generated_utc": "2026-10-15T04:57:42+00:00",
+    "git": {
+      "commit": "156d81ac29cdde9a876e414b0ba7c1888b68bd31",
+      "dirty": true
+    },
+    "inputs": {
+      "bundle": {
+        "path": "models/mit_bih_inference_bundle.json",
+        "sha256": "e075f07ace04056e1533fe327dff4a38f0bce85e783b3eab88358bd507e59fa2"
+      }
+    }
+  },
+  "published_headline_macro_f1": null,
+  "records": [
+    "100",
+    "103",
+    "105",
+    "111",
+    "113",
+    "117",
+    "121",
+    "123",
+    "200",
+    "210",
+    "212",
+    "213",
+    "214",
+    "219",
+    "221",
+    "222",
+    "228",
+    "231",
+    "232",
+    "233",
+    "234"
+  ],
+  "seconds": 523.3,
+  "note": "DS2 without record 202, which comes from the same patient as DS1 record 201. Beats prepared by the unchanged Phase 1 pipeline on 2026-10-14."
+}

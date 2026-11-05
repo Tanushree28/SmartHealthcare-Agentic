@@ -1,0 +1,141 @@
+# Knowledge for the agent pipeline: review ranges, drug groups and rules.
+#
+# DRAFT. Every range, threshold and rule below is a starting point written for
+# the demo and needs review by the professor. Read by src/agentic/knowledge.py,
+# which refuses a rule without a source.
+#
+# Ranges are adult reference ranges used only to FLAG values and to give an
+# abnormal lab its direction (low/high). They are not treatment targets.
+
+status = "draft - needs professor review"
+
+[vital_ranges]
+heart_rate = [60, 100]   # beats/min
+sbp = [90, 140]          # mmHg
+dbp = [60, 90]           # mmHg
+mbp = [65, 110]          # mmHg
+resp_rate = [12, 20]     # breaths/min
+spo2 = [94, 100]         # %
+temp_c = [36.0, 38.0]    # degC
+
+[lab_ranges]
+potassium = [3.5, 5.0]       # mEq/L
+sodium = [135, 145]          # mEq/L
+lactate = [0.5, 2.0]         # mmol/L
+creatinine = [0.5, 1.2]      # mg/dL
+glucose = [70, 180]          # mg/dL
+hemoglobin = [12.0, 17.5]    # g/dL
+wbc = [4.0, 11.0]            # K/uL
+bnp = [0, 100]               # pg/mL
+troponin_t = [0, 0.01]       # ng/mL
+troponin_i = [0, 0.04]       # ng/mL
+ck_mb = [0, 5]               # ng/mL
+
+# A drug belongs to a group when its PRESCRIPTIONS name contains one of these
+# lower-case words. "heparin" also matches line flushes; acceptable for a demo.
+[drug_groups]
+antiarrhythmic = ["amiodarone", "lidocaine", "procainamide", "sotalol", "dofetilide", "flecainide", "propafenone", "mexiletine"]
+beta_blocker = ["metoprolol", "carvedilol", "atenolol", "esmolol", "labetalol", "propranolol", "bisoprolol"]
+anticoagulant = ["heparin", "warfarin", "enoxaparin", "apixaban", "rivaroxaban", "dabigatran", "bivalirudin", "argatroban"]
+diuretic = ["furosemide", "bumetanide", "torsemide", "hydrochlorothiazide", "spironolactone", "metolazone"]
+potassium_supplement = ["potassium chloride", "potassium phosphate", "kcl"]
+digoxin = ["digoxin"]
+vasopressor_inotrope = ["norepinephrine", "epinephrine", "dopamine", "dobutamine", "vasopressin", "phenylephrine", "milrinone"]
+
+[[rule]]
+id = "R1"
+title = "Frequent ventricular ectopy"
+all = [{ kind = "class_share", key = "V", op = ">=", value = 10 }]
+says = "Frequent ventricular ectopic (V) beats in this ECG window."
+source = "Project draft threshold (V beats at least 10% of the window); threshold to review"
+
+[[rule]]
+id = "R2"
+title = "Run consistent with non-sustained VT"
+all = [{ kind = "v_run", op = ">", value = 100, field = "max_rate_bpm" }]
+says = "A run of 3 or more V beats faster than 100/min, consistent with the definition of non-sustained VT; needs clinician review."
+source = "2017 AHA/ACC/HRS guideline for ventricular arrhythmias and the prevention of sudden cardiac death (NSVT definition); to confirm"
+
+[[rule]]
+id = "R3"
+title = "Ventricular ectopy with low potassium"
+all = [{ kind = "lab_abnormal", key = "potassium:low" }]
+any = [
+  { kind = "class_share", key = "V", op = ">=", value = 10 },
+  { kind = "v_run" },
+]
+says = "Ventricular ectopy together with low potassium: a combination worth checking."
+source = "Low potassium is a recognised contributor to ventricular arrhythmias; source to confirm"
+
+[[rule]]
+id = "R4"
+title = "Fast heart rate on the ECG"
+all = [{ kind = "heart_rate", op = ">", value = 100 }]
+says = "Heart rate above 100/min in this ECG window (tachycardia)."
+source = "Standard adult definition of tachycardia (above 100 beats/min); to confirm"
+
+[[rule]]
+id = "R5"
+title = "Slow heart rate on the ECG"
+all = [{ kind = "heart_rate", op = "<", value = 60 }]
+says = "Heart rate below 60/min in this ECG window (bradycardia)."
+source = "Standard adult definition of bradycardia (below 60 beats/min); to confirm"
+
+[[rule]]
+id = "R6"
+title = "Frequent supraventricular ectopy"
+any = [
+  { kind = "class_share", key = "S", op = ">=", value = 10 },
+  { kind = "s_run" },
+]
+says = "Frequent supraventricular ectopic (S) beats in this ECG window."
+source = "Project draft threshold (S beats at least 10% of the window, or a run); threshold to review"
+
+[[rule]]
+id = "R7"
+title = "Raised lactate"
+all = [{ kind = "lab_abnormal", key = "lactate:high" }]
+says = "Raised lactate before the 24-hour mark."
+source = "Sepsis-3 (Singer et al., JAMA 2016) uses lactate above 2 mmol/L; to confirm"
+
+[[rule]]
+id = "R8"
+title = "Troponin above the reference"
+any = [
+  { kind = "lab_abnormal", key = "troponin_t:*" },
+  { kind = "lab_abnormal", key = "troponin_i:*" },
+]
+says = "Troponin above the reference: a marker of heart-muscle injury."
+source = "Fourth Universal Definition of Myocardial Infarction (Thygesen et al., 2018); to confirm"
+
+[[rule]]
+id = "R9"
+title = "Low mean arterial pressure"
+all = [{ kind = "vital_out_of_range", key = "mbp:low" }]
+says = "Mean arterial pressure fell below 65 mmHg at some point before the 24-hour mark."
+source = "Surviving Sepsis Campaign initial MAP target of 65 mmHg; to confirm"
+
+[[rule]]
+id = "R10"
+title = "Ectopy on an antiarrhythmic"
+all = [{ kind = "medication", key = "antiarrhythmic" }]
+any = [
+  { kind = "class_share", key = "V", op = ">=", value = 10 },
+  { kind = "v_run" },
+]
+says = "Ventricular ectopy although an antiarrhythmic had already been started."
+source = "Project draft; to confirm"
+
+[[rule]]
+id = "R11"
+title = "Many unclassifiable beats"
+all = [{ kind = "q_share_high" }]
+says = "Many beats were unclassifiable; ECG quality may limit these findings."
+source = "Project rule (model limitation)"
+
+[[rule]]
+id = "R12"
+title = "Demo risk score above threshold"
+all = [{ kind = "risk_score", field = "flagged", op = "==", value = true }]
+says = "The Demo risk model scored this stay above its threshold (not validated)."
+source = "Project rule (MIMIC-III Demo model)"

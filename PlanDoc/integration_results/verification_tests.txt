@@ -1,0 +1,18 @@
+# Test runs, 2026-10-15T12:42Z, git 156d81a (uncommitted changes present)
+
+$ ./venv/bin/python -m pytest -q
+633 passed, 19 deselected in 31.21s
+
+$ ./venv/bin/python -m pytest -q -m requires_data
+15 passed, 637 deselected in 2.39s
+
+Per module:
+$ pytest tests/mit_bih -q  ->  436 passed, 14 deselected in 12.12s
+$ pytest tests/mimic_iii -q  ->  109 passed, 4 deselected in 9.78s
+$ pytest tests/multimodal -q  ->  59 passed, 1 deselected in 1.07s
+$ pytest tests/common -q  ->  15 passed in 1.14s
+$ pytest tests/test_scripts.py -q  ->  14 passed in 9.57s
+
+Slow training tests (run 2026-10-14; training code unchanged since):
+$ ./venv/bin/python -m pytest tests/mit_bih/test_imbalance_regression.py -m slow -q
+4 passed, 100 warnings in 330.57s (0:05:30)

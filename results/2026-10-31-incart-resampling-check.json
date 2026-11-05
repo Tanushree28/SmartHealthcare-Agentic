@@ -1,0 +1,287 @@
+{
+  "calibration": "Uncalibrated. Phase 1f measured mean predicted P(S) at 3.2x and P(F) at 14.5x the true class rates. Treat the scores as a ranking of beats, not as probabilities, until Phase 1f Stage B fits a correction.",
+  "difference": 7.143258037223266e-05,
+  "ensemble": "D_all_four",
+  "interval_note": "95% percentile bootstrap resampling records (DS2: one record per patient).",
+  "is_full_ds2": true,
+  "n_boot": 1000,
+  "n_models": 20,
+  "not_clinical": "Research result on a public dataset; not clinical validation and not a medical device.",
+  "original": {
+    "ci95": [
+      0.48110414075866065,
+      0.594864127423429
+    ],
+    "counts": {
+      "annotated": 49712,
+      "classified": 49646,
+      "collided": 0,
+      "dropped_boundary": 22,
+      "dropped_no_rr_neighbour": 44,
+      "out_of_range": 0
+    },
+    "headline_macro_f1": 0.5554217266106716,
+    "metrics": {
+      "accuracy": 0.8946,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          40601,
+          1364,
+          338,
+          1893,
+          0
+        ],
+        [
+          875,
+          777,
+          183,
+          1,
+          0
+        ],
+        [
+          136,
+          45,
+          3034,
+          4,
+          0
+        ],
+        [
+          357,
+          0,
+          29,
+          2,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "DS2, original",
+      "macro_f1": 0.4443,
+      "macro_f1_headline": 0.5554,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.4579,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9424,
+          "precision": 0.9674,
+          "recall": 0.9187,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.3864,
+          "precision": 0.3554,
+          "recall": 0.4232,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.8912,
+          "precision": 0.8451,
+          "recall": 0.9425,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0017,
+          "precision": 0.0011,
+          "recall": 0.0052,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    }
+  },
+  "provenance": {
+    "environment": {
+      "numpy": "2.3.3",
+      "pandas": "2.3.3",
+      "python": "3.13.9",
+      "scipy": "1.16.2",
+      "sklearn": "1.7.2",
+      "torch": "2.14.0"
+    },
+    "generated_utc": "2026-10-31T16:25:39+00:00",
+    "git": {
+      "commit": "156d81ac29cdde9a876e414b0ba7c1888b68bd31",
+      "dirty": true
+    },
+    "inputs": {
+      "bundle": {
+        "path": "/Users/tanushreenepal/Desktop/Smart Healthcare/models/mit_bih_inference_bundle.json",
+        "sha256": "e075f07ace04056e1533fe327dff4a38f0bce85e783b3eab88358bd507e59fa2"
+      }
+    }
+  },
+  "published_headline_macro_f1": 0.5554,
+  "question": "Does resampling 360 -> 257 -> 360 Hz change the DS2 headline macro-F1?",
+  "records": [
+    "100",
+    "103",
+    "105",
+    "111",
+    "113",
+    "117",
+    "121",
+    "123",
+    "200",
+    "202",
+    "210",
+    "212",
+    "213",
+    "214",
+    "219",
+    "221",
+    "222",
+    "228",
+    "231",
+    "232",
+    "233",
+    "234"
+  ],
+  "reproduces_published": true,
+  "resampling_matters": false,
+  "round_trip": {
+    "ci95": [
+      0.48084222103492563,
+      0.5948589928110524
+    ],
+    "counts": {
+      "annotated": 49712,
+      "classified": 49646,
+      "collided": 0,
+      "dropped_boundary": 22,
+      "dropped_no_rr_neighbour": 44,
+      "out_of_range": 0
+    },
+    "headline_macro_f1": 0.5554931591910438,
+    "metrics": {
+      "accuracy": 0.8937,
+      "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+      "classes": [
+        "N",
+        "S",
+        "V",
+        "F",
+        "Q"
+      ],
+      "confusion_matrix": [
+        [
+          40535,
+          1372,
+          378,
+          1911,
+          0
+        ],
+        [
+          848,
+          794,
+          191,
+          3,
+          0
+        ],
+        [
+          136,
+          45,
+          3035,
+          3,
+          0
+        ],
+        [
+          356,
+          0,
+          29,
+          3,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "confusion_matrix_note": "rows = true class, columns = predicted class",
+      "label": "DS2, round_trip",
+      "macro_f1": 0.4444,
+      "macro_f1_headline": 0.5555,
+      "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+      "macro_recall": 0.46,
+      "n_test": 49646,
+      "per_class": [
+        {
+          "class": "N",
+          "f1": 0.9419,
+          "precision": 0.968,
+          "recall": 0.9172,
+          "support": 44196
+        },
+        {
+          "class": "S",
+          "f1": 0.3924,
+          "precision": 0.3591,
+          "recall": 0.4325,
+          "support": 1836
+        },
+        {
+          "class": "V",
+          "f1": 0.8851,
+          "precision": 0.834,
+          "recall": 0.9428,
+          "support": 3219
+        },
+        {
+          "class": "F",
+          "f1": 0.0026,
+          "precision": 0.0016,
+          "recall": 0.0077,
+          "support": 388
+        },
+        {
+          "class": "Q",
+          "f1": 0.0,
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 7
+        }
+      ]
+    }
+  },
+  "run": {
+    "command": "python scripts/incart/resampling_check.py",
+    "commit_note": "The incart module was not yet committed at run time (PERMISSIONS.md: commits need the user's OK), so the working tree was dirty; this is the nearest commit, not a verified provenance record. The provenance block holds library versions and input hashes.",
+    "date": "2026-10-31",
+    "design": "PlanDoc/specs/2026-10-29-incart-external-test-design.md",
+    "device": "MacBook CPU (torch on CPU)",
+    "nearest_commit": "156d81a",
+    "phase": "open-data plan, step 2 (INCART external test)",
+    "seconds_note": "6,088 s wall time because the Mac went to sleep twice mid-run (pmset log: 'Entering Sleep state', user wake at 11:20). Per-record compute was 25-50 s; the computation itself took about 12 minutes. Sleep pauses a process; it does not change its numbers."
+  },
+  "seconds": 6088.4,
+  "seed": 20260916,
+  "threshold": 0.01,
+  "via_fs": 257
+}

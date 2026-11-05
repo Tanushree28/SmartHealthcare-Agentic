@@ -1,0 +1,407 @@
+{
+  "fig01_mitbih_learning_curve": {
+    "source": "PlanDoc/integration_results/mitbih_learning_curve_fold0_focal.json",
+    "epoch": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "train_loss": [
+      0.275160862217318,
+      0.13445527424435916,
+      0.09987696397865835,
+      0.08739462996786596,
+      0.07772325605303403,
+      0.08661978386128304,
+      0.07371768540916736,
+      0.06521276722823553,
+      0.05898472013679635,
+      0.0533745292805094,
+      0.046206269491354826,
+      0.05218759884277078,
+      0.04652317503913824,
+      0.04442536179492197,
+      0.04207375745751618,
+      0.03541270875884454,
+      0.032694105931123624,
+      0.03375659350760771,
+      0.030419942335107968,
+      0.02806789358029797,
+      0.03326720950765861,
+      0.02614545956017183,
+      0.022785656881722318,
+      0.022652360286039872,
+      0.023420640057435816,
+      0.01807034429942978,
+      0.023208471240230844,
+      0.019442324031687795,
+      0.017167176025991104
+    ],
+    "val_macro_f1_headline": [
+      0.3119515348206351,
+      0.41406737961443174,
+      0.40676488644382447,
+      0.3817576490007142,
+      0.43112806852651286,
+      0.4103594665613055,
+      0.4603271635728114,
+      0.43886466339680397,
+      0.46892695682406643,
+      0.4650339507349406,
+      0.4914393964392739,
+      0.500534022113974,
+      0.5221667957812872,
+      0.48145571735090825,
+      0.38685494814332333,
+      0.4583994120809719,
+      0.5252231326052118,
+      0.5178619481013943,
+      0.4656616736219554,
+      0.4843352311841126,
+      0.5274988218940518,
+      0.4234060276043341,
+      0.501776672455811,
+      0.4771992207794393,
+      0.4572829048580199,
+      0.47517463229671364,
+      0.5197284749726211,
+      0.5163579864647088,
+      0.479007509631957
+    ],
+    "best_epoch": 21,
+    "device": "mps"
+  },
+  "fig02_mitbih_confusion_matrix": {
+    "source": "results/2026-10-14-bundle-eval-ds1_ds2.json",
+    "classes": [
+      "N",
+      "S",
+      "V",
+      "F",
+      "Q"
+    ],
+    "counts": [
+      [
+        40601,
+        1364,
+        338,
+        1893,
+        0
+      ],
+      [
+        875,
+        777,
+        183,
+        1,
+        0
+      ],
+      [
+        136,
+        45,
+        3034,
+        4,
+        0
+      ],
+      [
+        357,
+        0,
+        29,
+        2,
+        0
+      ],
+      [
+        1,
+        0,
+        6,
+        0,
+        0
+      ]
+    ]
+  },
+  "fig03_mitbih_per_class": {
+    "source": "results/2026-10-14-bundle-eval-ds1_ds2.json",
+    "per_class": [
+      {
+        "class": "N",
+        "f1": 0.9424,
+        "precision": 0.9674,
+        "recall": 0.9187,
+        "support": 44196
+      },
+      {
+        "class": "S",
+        "f1": 0.3864,
+        "precision": 0.3554,
+        "recall": 0.4232,
+        "support": 1836
+      },
+      {
+        "class": "V",
+        "f1": 0.8912,
+        "precision": 0.8451,
+        "recall": 0.9425,
+        "support": 3219
+      },
+      {
+        "class": "F",
+        "f1": 0.0017,
+        "precision": 0.0011,
+        "recall": 0.0052,
+        "support": 388
+      },
+      {
+        "class": "Q",
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 7
+      }
+    ]
+  },
+  "fig04_mitbih_model_progression": {
+    "metric": "DS2 macro-F1 over N/S/V/F",
+    "sources": [
+      "results/2026-08-27-baseline-ds1_ds2.json",
+      "results/2026-09-16-nn-ds1_ds2.json",
+      "results/2026-09-17-nn-v2-ds1_ds2.json",
+      "results/2026-09-17-ensemble-mix-ds1_ds2.json"
+    ],
+    "rows": [
+      {
+        "model": "1b  Random Forest baseline",
+        "macro_f1": 0.5061
+      },
+      {
+        "model": "1d  network, plain cross-entropy",
+        "macro_f1": 0.3788
+      },
+      {
+        "model": "1d  network, waveform only (no RR)",
+        "macro_f1": 0.3109
+      },
+      {
+        "model": "1d  network, oversampling",
+        "macro_f1": 0.4846
+      },
+      {
+        "model": "1d  network, weighted cross-entropy",
+        "macro_f1": 0.4919
+      },
+      {
+        "model": "1d  weighted + tuned thresholds",
+        "macro_f1": 0.5364
+      },
+      {
+        "model": "1d  network, focal loss",
+        "macro_f1": 0.5454
+      },
+      {
+        "model": "1e  5 x focal fold ensemble",
+        "macro_f1": 0.5902
+      },
+      {
+        "model": "1g  focal-only ensemble (not selected)",
+        "macro_f1": 0.6123
+      },
+      {
+        "model": "1g  D_all_four ensemble (selected, reported)",
+        "macro_f1": 0.5554
+      }
+    ]
+  },
+  "fig05_mimic_cohort_flow": {
+    "source": "results/2026-10-14-mimic-demo-pipeline.json",
+    "flow": [
+      {
+        "stays": 136,
+        "step": "All ICU stays",
+        "subjects": 100
+      },
+      {
+        "stays": 135,
+        "step": "Adults (age >= 18)",
+        "subjects": 99
+      },
+      {
+        "stays": 99,
+        "step": "First adult ICU stay per patient",
+        "subjects": 99
+      },
+      {
+        "stays": 66,
+        "step": "Cardiac ICD-9 code on the admission",
+        "subjects": 66
+      },
+      {
+        "stays": 51,
+        "step": "In the ICU and alive at intime + 24 h",
+        "subjects": 51
+      }
+    ]
+  },
+  "fig06_mimic_missingness": {
+    "source": "$SMART_HEALTH_DATA/processed/mimiciii-demo/build_summary.json",
+    "missing_rate": {
+      "creatinine": 0.0,
+      "dbp": 0.0,
+      "glucose": 0.0,
+      "heart_rate": 0.0,
+      "mbp": 0.0,
+      "potassium": 0.0,
+      "resp_rate": 0.0,
+      "sbp": 0.0,
+      "sodium": 0.0,
+      "spo2": 0.0,
+      "temp_c": 0.0,
+      "wbc": 0.0,
+      "hemoglobin": 0.0196078431372549,
+      "lactate": 0.37254901960784315,
+      "troponin_t": 0.49019607843137253,
+      "ck_mb": 0.5294117647058824,
+      "bnp": 0.9411764705882353,
+      "troponin_i": 0.9411764705882353
+    },
+    "n_stays": 51
+  },
+  "fig07_mimic_measurement_density": {
+    "source": "$SMART_HEALTH_DATA/processed/mimiciii-demo/features.csv.gz (aggregated)",
+    "median_measurements_per_measured_stay": {
+      "bnp": 1.0,
+      "troponin_i": 1.0,
+      "ck_mb": 2.0,
+      "creatinine": 2.0,
+      "hemoglobin": 2.0,
+      "lactate": 2.0,
+      "sodium": 2.0,
+      "troponin_t": 2.0,
+      "wbc": 2.0,
+      "glucose": 3.0,
+      "potassium": 3.0,
+      "temp_c": 7.0,
+      "dbp": 27.0,
+      "heart_rate": 27.0,
+      "mbp": 27.0,
+      "sbp": 27.0,
+      "spo2": 27.0,
+      "resp_rate": 28.0
+    }
+  },
+  "fig08_mimic_demo_metrics": {
+    "source": "results/2026-10-14-mimic-demo-pipeline.json",
+    "metrics": {
+      "train": {
+        "n": 37,
+        "n_positive": 11,
+        "auroc": 1.0,
+        "auprc": 1.0,
+        "auroc_ci": {
+          "alpha": 0.05,
+          "lower": 0.9999999999999999,
+          "metric": "auroc",
+          "n_boot": 1000,
+          "n_valid": 1000,
+          "upper": 1.0
+        },
+        "auprc_ci": {
+          "alpha": 0.05,
+          "lower": 0.9999999999999998,
+          "metric": "auprc",
+          "n_boot": 1000,
+          "n_valid": 1000,
+          "upper": 1.0
+        },
+        "prevalence": 0.2972972972972973
+      },
+      "val": {
+        "n": 7,
+        "n_positive": 2,
+        "auroc": 1.0,
+        "auprc": 1.0,
+        "auroc_ci": {
+          "alpha": 0.05,
+          "lower": 1.0,
+          "metric": "auroc",
+          "n_boot": 1000,
+          "n_valid": 909,
+          "upper": 1.0
+        },
+        "auprc_ci": {
+          "alpha": 0.05,
+          "lower": 1.0,
+          "metric": "auprc",
+          "n_boot": 1000,
+          "n_valid": 909,
+          "upper": 1.0
+        },
+        "prevalence": 0.2857142857142857
+      },
+      "test": {
+        "n": 7,
+        "n_positive": 2,
+        "auroc": 0.39999999999999997,
+        "auprc": 0.3333333333333333,
+        "auroc_ci": {
+          "alpha": 0.05,
+          "lower": 0.0,
+          "metric": "auroc",
+          "n_boot": 1000,
+          "n_valid": 909,
+          "upper": 0.8333333333333334
+        },
+        "auprc_ci": {
+          "alpha": 0.05,
+          "lower": 0.14285714285714285,
+          "metric": "auprc",
+          "n_boot": 1000,
+          "n_valid": 909,
+          "upper": 0.9166666666666666
+        },
+        "prevalence": 0.2857142857142857
+      }
+    }
+  },
+  "fig09_tests_before_after": {
+    "before_source": "PlanDoc/IMPLEMENTATION.md: 414 offline tests (2026-10-11 and the 2026-10-14 restructure)",
+    "after_source": "pytest --collect-only, default markers (offline)",
+    "before": {
+      "mit_bih": 414,
+      "mimic_iii": 0,
+      "multimodal": 0,
+      "common": 0,
+      "scripts": 0
+    },
+    "after": {
+      "mit_bih": 436,
+      "mimic_iii": 109,
+      "multimodal": 59,
+      "common": 15,
+      "scripts": 14
+    }
+  }
+}

@@ -1,0 +1,465 @@
+{
+  "banner": "PIPELINE VERIFICATION ONLY - NOT CLINICAL PERFORMANCE. These numbers come from the MIMIC-III Demo (100 patients, all of whom had died by the time PhysioNet selected them). The test split has a handful of patients; the confidence intervals show how little the point estimates mean. Do not quote them as model performance.",
+  "cohort": {
+    "cardiac_groups_description_only": {
+      "Arrhythmia": 31,
+      "CAD": 18,
+      "Heart failure": 29,
+      "MI": 11
+    },
+    "flow": [
+      {
+        "stays": 136,
+        "step": "All ICU stays",
+        "subjects": 100
+      },
+      {
+        "stays": 135,
+        "step": "Adults (age >= 18)",
+        "subjects": 99
+      },
+      {
+        "stays": 99,
+        "step": "First adult ICU stay per patient",
+        "subjects": 99
+      },
+      {
+        "stays": 66,
+        "step": "Cardiac ICD-9 code on the admission",
+        "subjects": 66
+      },
+      {
+        "stays": 51,
+        "step": "In the ICU and alive at intime + 24 h",
+        "subjects": 51
+      }
+    ],
+    "n_negative": 36,
+    "n_positive": 15,
+    "n_stays": 51,
+    "n_subjects": 51,
+    "notes": [
+      "1 stays excluded: hospital discharge before the index time despite a later ICU outtime"
+    ]
+  },
+  "data_source": {
+    "description": "MIMIC-III Clinical Database Demo v1.4: 100 patients, all of whom had died by the time PhysioNet selected them. Verifies the pipeline; cannot estimate clinical performance.",
+    "is_demo": true,
+    "name": "demo"
+  },
+  "metrics": {
+    "test": {
+      "auprc": 0.3333333333333333,
+      "auprc_ci": {
+        "alpha": 0.05,
+        "lower": 0.14285714285714285,
+        "metric": "auprc",
+        "n_boot": 1000,
+        "n_valid": 909,
+        "upper": 0.9166666666666666
+      },
+      "auroc": 0.39999999999999997,
+      "auroc_ci": {
+        "alpha": 0.05,
+        "lower": 0.0,
+        "metric": "auroc",
+        "n_boot": 1000,
+        "n_valid": 909,
+        "upper": 0.8333333333333334
+      },
+      "brier": 0.36697189325051494,
+      "confusion_matrix": {
+        "fn": 2,
+        "fp": 1,
+        "tn": 4,
+        "tp": 0
+      },
+      "f1": null,
+      "log_loss": 1.8527520803445456,
+      "mean_predicted": 0.15592143563816954,
+      "n": 7,
+      "n_positive": 2,
+      "npv": 0.6666666666666666,
+      "ppv": 0.0,
+      "prevalence": 0.2857142857142857,
+      "reliability": [
+        {
+          "lower": 0.0,
+          "mean_predicted": 0.03857189111184196,
+          "n": 6,
+          "observed_rate": 0.3333333333333333,
+          "upper": 0.2
+        },
+        {
+          "lower": 0.2,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "lower": 0.4,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "lower": 0.8,
+          "mean_predicted": 0.860018702796135,
+          "n": 1,
+          "observed_rate": 0.0,
+          "upper": 1.0
+        }
+      ],
+      "sensitivity": 0.0,
+      "specificity": 0.8,
+      "threshold": 0.7005532480418036,
+      "undefined": {
+        "f1": "precision or recall undefined or both zero"
+      }
+    },
+    "train": {
+      "auprc": 1.0,
+      "auprc_ci": {
+        "alpha": 0.05,
+        "lower": 0.9999999999999998,
+        "metric": "auprc",
+        "n_boot": 1000,
+        "n_valid": 1000,
+        "upper": 1.0
+      },
+      "auroc": 1.0,
+      "auroc_ci": {
+        "alpha": 0.05,
+        "lower": 0.9999999999999999,
+        "metric": "auroc",
+        "n_boot": 1000,
+        "n_valid": 1000,
+        "upper": 1.0
+      },
+      "brier": 0.006376970297037449,
+      "confusion_matrix": {
+        "fn": 0,
+        "fp": 0,
+        "tn": 26,
+        "tp": 11
+      },
+      "f1": 1.0,
+      "log_loss": 0.066434484014383,
+      "mean_predicted": 0.3227869518039457,
+      "n": 37,
+      "n_positive": 11,
+      "npv": 1.0,
+      "ppv": 1.0,
+      "prevalence": 0.2972972972972973,
+      "reliability": [
+        {
+          "lower": 0.0,
+          "mean_predicted": 0.0629226576295955,
+          "n": 26,
+          "observed_rate": 0.0,
+          "upper": 0.2
+        },
+        {
+          "lower": 0.2,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "lower": 0.4,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.6000000000000001
+        },
+        {
+          "lower": 0.6000000000000001,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.8
+        },
+        {
+          "lower": 0.8,
+          "mean_predicted": 0.9370116471251368,
+          "n": 11,
+          "observed_rate": 1.0,
+          "upper": 1.0
+        }
+      ],
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "threshold": 0.7005532480418036,
+      "undefined": {}
+    },
+    "val": {
+      "auprc": 1.0,
+      "auprc_ci": {
+        "alpha": 0.05,
+        "lower": 1.0,
+        "metric": "auprc",
+        "n_boot": 1000,
+        "n_valid": 909,
+        "upper": 1.0
+      },
+      "auroc": 1.0,
+      "auroc_ci": {
+        "alpha": 0.05,
+        "lower": 1.0,
+        "metric": "auroc",
+        "n_boot": 1000,
+        "n_valid": 909,
+        "upper": 1.0
+      },
+      "brier": 0.12264173092335033,
+      "confusion_matrix": {
+        "fn": 0,
+        "fp": 0,
+        "tn": 5,
+        "tp": 2
+      },
+      "f1": 1.0,
+      "log_loss": 0.3558758993552163,
+      "mean_predicted": 0.44598376413901447,
+      "n": 7,
+      "n_positive": 2,
+      "npv": 1.0,
+      "ppv": 1.0,
+      "prevalence": 0.2857142857142857,
+      "reliability": [
+        {
+          "lower": 0.0,
+          "mean_predicted": 0.0753057623439206,
+          "n": 3,
+          "observed_rate": 0.0,
+          "upper": 0.2
+        },
+        {
+          "lower": 0.2,
+          "mean_predicted": null,
+          "n": 0,
+          "observed_rate": null,
+          "upper": 0.4
+        },
+        {
+          "lower": 0.4,
+          "mean_predicted": 0.5115061055627413,
+          "n": 1,
+          "observed_rate": 0.0,
+          "upper": 0.6000000000000001
+        },
+        {
+          "lower": 0.6000000000000001,
+          "mean_predicted": 0.6950004226401993,
+          "n": 2,
+          "observed_rate": 0.5,
+          "upper": 0.8
+        },
+        {
+          "lower": 0.8,
+          "mean_predicted": 0.9944621110981997,
+          "n": 1,
+          "observed_rate": 1.0,
+          "upper": 1.0
+        }
+      ],
+      "sensitivity": 1.0,
+      "specificity": 1.0,
+      "threshold": 0.7005532480418036,
+      "undefined": {}
+    }
+  },
+  "provenance": {
+    "environment": {
+      "numpy": "2.3.3",
+      "pandas": "2.3.3",
+      "python": "3.13.9",
+      "scipy": "1.16.2",
+      "sklearn": "1.7.2",
+      "torch": "2.14.0"
+    },
+    "generated_utc": "2026-10-15T04:23:15+00:00",
+    "git": {
+      "commit": "156d81ac29cdde9a876e414b0ba7c1888b68bd31",
+      "dirty": true
+    },
+    "inputs": {
+      "features": {
+        "path": "/Users/tanushreenepal/physionet-data/processed/mimiciii-demo/features.csv.gz",
+        "sha256": "a53730f8938ec310002a829855ad4c63c6d19b8a26720370e03e5ab5dbd81435"
+      },
+      "splits": {
+        "path": "/Users/tanushreenepal/physionet-data/processed/mimiciii-demo/splits.json",
+        "sha256": "bd8e5eb53d2b8f33ad82cb116343037c76496447c5cbbf90dcc4a8b5ec7777a9"
+      }
+    }
+  },
+  "research_disclaimer": "Research artifact. Not clinically validated, not a medical device, not for patient care.",
+  "selection": {
+    "candidates": [
+      {
+        "C": 0.01,
+        "val_auprc": 0.6666666666666666
+      },
+      {
+        "C": 0.1,
+        "val_auprc": 0.75
+      },
+      {
+        "C": 1.0,
+        "val_auprc": 1.0
+      },
+      {
+        "C": 10.0,
+        "val_auprc": 1.0
+      }
+    ],
+    "model_spec": {
+      "C_grid": [
+        0.01,
+        0.1,
+        1.0,
+        10.0
+      ],
+      "class_weight": "balanced",
+      "default_C": 1.0,
+      "max_iter": 5000,
+      "n_bootstrap": 1000,
+      "threshold_rule": "youden"
+    },
+    "n_train": 37,
+    "n_train_positive": 11,
+    "n_val": 7,
+    "n_val_positive": 2,
+    "selected_C": 1.0,
+    "selection_note": "C chosen by validation AUPRC; ties to the smaller C",
+    "threshold": 0.7005532480418036,
+    "threshold_note": "youden on validation",
+    "threshold_rule": "youden"
+  },
+  "split": {
+    "test": {
+      "patients": 7,
+      "positive": 2,
+      "stays": 7
+    },
+    "train": {
+      "patients": 37,
+      "positive": 11,
+      "stays": 37
+    },
+    "val": {
+      "patients": 7,
+      "positive": 2,
+      "stays": 7
+    }
+  },
+  "task": {
+    "age_over_89_value": 91.4,
+    "cardiac_icd9_prefixes": [
+      "410",
+      "411",
+      "412",
+      "414",
+      "427",
+      "428"
+    ],
+    "exclusions": [
+      "age < 18",
+      "not the patient's first adult ICU stay",
+      "no cardiac ICD-9 code on the admission",
+      "left the ICU before the index time",
+      "died before the index time"
+    ],
+    "first_stay_only": true,
+    "horizon": "index time to hospital discharge",
+    "index_time": "ICUSTAYS.intime + 24 h",
+    "lab_lookback_hours": 6.0,
+    "label": "ADMISSIONS.hospital_expire_flag (death before hospital discharge)",
+    "labs_window": "[intime - 6 h, intime + 24 h)",
+    "min_age": 18.0,
+    "name": "cardiac_icu_in_hospital_mortality_24h",
+    "observation_hours": 24.0,
+    "split_fractions": [
+      0.7,
+      0.15,
+      0.15
+    ],
+    "split_seed": 20261014,
+    "target": "in_hospital_mortality",
+    "vitals_window": "[intime, intime + 24 h)"
+  },
+  "title": "MIMIC-III clinical model: in-hospital mortality",
+  "top_coefficients": [
+    {
+      "coefficient": 0.5373600870385575,
+      "feature": "glucose_min"
+    },
+    {
+      "coefficient": -0.5270685094083489,
+      "feature": "dbp_min"
+    },
+    {
+      "coefficient": -0.4839764900468159,
+      "feature": "spo2_last"
+    },
+    {
+      "coefficient": 0.47371517129813073,
+      "feature": "sodium_count"
+    },
+    {
+      "coefficient": 0.46275686388490855,
+      "feature": "creatinine_count"
+    },
+    {
+      "coefficient": -0.4609803213706715,
+      "feature": "resp_rate_min"
+    },
+    {
+      "coefficient": -0.42772827026136184,
+      "feature": "mbp_count"
+    },
+    {
+      "coefficient": 0.42423291457667645,
+      "feature": "temp_c_last"
+    },
+    {
+      "coefficient": -0.4058147024709022,
+      "feature": "resp_rate_mean"
+    },
+    {
+      "coefficient": -0.40006005451697974,
+      "feature": "heart_rate_count"
+    },
+    {
+      "coefficient": 0.39673171239675603,
+      "feature": "temp_c_mean"
+    },
+    {
+      "coefficient": -0.3939806906357061,
+      "feature": "sbp_count"
+    },
+    {
+      "coefficient": -0.3926845970541454,
+      "feature": "dbp_count"
+    },
+    {
+      "coefficient": 0.3726475015657549,
+      "feature": "glucose_mean"
+    },
+    {
+      "coefficient": -0.33377248712924584,
+      "feature": "hemoglobin_max"
+    }
+  ]
+}

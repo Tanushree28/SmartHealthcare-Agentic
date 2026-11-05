@@ -1,0 +1,102 @@
+[
+  {
+    "check": "python",
+    "status": "OK",
+    "detail": "3.13.9 (project pins 3.13)"
+  },
+  {
+    "check": "package numpy",
+    "status": "OK",
+    "detail": "installed 2.3.3, pinned 2.3.3"
+  },
+  {
+    "check": "package scipy",
+    "status": "OK",
+    "detail": "installed 1.16.2, pinned 1.16.2"
+  },
+  {
+    "check": "package pandas",
+    "status": "OK",
+    "detail": "installed 2.3.3, pinned 2.3.3"
+  },
+  {
+    "check": "package wfdb",
+    "status": "OK",
+    "detail": "installed 4.3.0, pinned 4.3.0"
+  },
+  {
+    "check": "package scikit-learn",
+    "status": "OK",
+    "detail": "installed 1.7.2, pinned 1.7.2"
+  },
+  {
+    "check": "package pytest",
+    "status": "OK",
+    "detail": "installed 8.4.2, pinned 8.4.2"
+  },
+  {
+    "check": "package torch",
+    "status": "OK",
+    "detail": "installed 2.14.0, pinned 2.14.0"
+  },
+  {
+    "check": "package matplotlib",
+    "status": "OK",
+    "detail": "installed 3.11.1, pinned 3.11.1"
+  },
+  {
+    "check": "compute",
+    "status": "OK",
+    "detail": "10 CPUs; torch devices ['cpu', 'mps']. Neural training ran on Colab GPUs; CPU training takes hours per phase."
+  },
+  {
+    "check": "MIT-BIH raw records",
+    "status": "OK",
+    "detail": "48/48 verify at $SMART_HEALTH_DATA/mitdb"
+  },
+  {
+    "check": "MIT-BIH DS1/DS2 beats",
+    "status": "OK",
+    "detail": "48 records, strategy ds1_ds2, at $SMART_HEALTH_DATA/processed/mitdb-ds12"
+  },
+  {
+    "check": "MIT-BIH inference bundle",
+    "status": "OK",
+    "detail": "D_all_four, 20 checkpoints, hashes verified; scores uncalibrated"
+  },
+  {
+    "check": "MIT-BIH calibration (Phase 1f Stage B)",
+    "status": "MISSING",
+    "detail": "not started; scores are rankings, not probabilities"
+  },
+  {
+    "check": "MIMIC-III config",
+    "status": "OK",
+    "detail": "configs/mimic_iii.toml"
+  },
+  {
+    "check": "MIMIC-III demo tables",
+    "status": "OK",
+    "detail": "all 8 tables and every ITEMID present at $SMART_HEALTH_DATA/mimiciii-demo"
+  },
+  {
+    "check": "MIMIC-III demo artifacts",
+    "status": "OK",
+    "detail": "at $SMART_HEALTH_DATA/processed/mimiciii-demo"
+  },
+  {
+    "check": "MIMIC-III full tables",
+    "status": "BLOCKED",
+    "detail": "$SMART_HEALTH_DATA/mimiciii absent. Requires PhysioNet credentialing (account, CITI training, signed DUA) - only the data owner can do this."
+  },
+  {
+    "check": "paired ECG + clinical dataset",
+    "status": "BLOCKED",
+    "detail": "MIT-BIH and MIMIC-III contain different patients. A paired source (MIMIC-III Waveform Matched Subset) needs credentialed MIMIC-III and terabyte-scale storage."
+  },
+  {
+    "check": "fusion model training",
+    "status": "BLOCKED",
+    "detail": "depends on the paired dataset above"
+  }
+]

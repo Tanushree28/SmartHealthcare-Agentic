@@ -8,6 +8,8 @@ Scope: the directory `/Users/tanushreenepal/Desktop/Smart Healthcare` and the da
 exception of creating the approved conda environment.
 
 Date: 2026-08-22
+Amended: 2026-10-15 — a local LLM via Ollama (localhost only) may receive project data; see
+"Local LLM (Ollama)". Cloud AI services remain forbidden.
 
 ---
 
@@ -40,6 +42,15 @@ Safe, reversible, local, and confined to the scope above.
 - Short local scripts that read project files or synthetic fixtures.
 - Use packages already installed in the approved environment.
 
+### Local LLM (Ollama) — added 2026-10-15
+- Call the Ollama server **on this machine only** (`http://localhost:11434`), using models
+  already pulled, from project code and tests.
+- Send it project data, **including patient-derived findings** (MIT-BIH, MIMIC-III Demo, and
+  later credentialed MIMIC-III), because the model runs locally and nothing leaves this
+  machine.
+- Save LLM outputs (reports) under the data root or `PlanDoc/`, under the same rules as any
+  other result: no row-level clinical data in the repository.
+
 Everything in this section is reversible with a file edit or deletion and touches no
 external system.
 
@@ -57,7 +68,11 @@ Meaningful side effects, external systems, or costs. I stop, explain, and wait.
   say-so on what is tracked.)*
 - **Downloading MIT-BIH** (~100 MB over the network) or any other dataset.
 - **Creating directories outside the project**, specifically `~/physionet-data`.
-- **Any network request**, including read-only ones — no silent fetching.
+- **Any network request**, including read-only ones — no silent fetching. *(Calls to the
+  local Ollama server on localhost are not network requests in this sense; see "Local LLM".)*
+- **Pulling a new Ollama model** (`ollama pull`), which downloads gigabytes.
+- **Pointing the LLM client at any address other than localhost**, including a remote
+  Ollama server.
 - **Long-running or expensive commands**, including a full 48-record preprocessing pass, if
   it is likely to run for many minutes.
 - **Refactors beyond the approved scope**, or restructuring files PLAN.md does not name.
@@ -108,7 +123,8 @@ Destructive, irreversible, credential-related, or reaching outside this machine.
 - Make purchases or incur billed usage.
 - Upload any patient-derived data to any external service, including AI APIs. **This holds
   even for the open demo subsets.** Clinical data leaves this machine only on your explicit
-  instruction.
+  instruction. *(A local Ollama server on this machine is not an external service; cloud
+  AI APIs, hosted LLMs and remote Ollama servers are.)*
 
 ### Testing integrity
 - Weaken, skip, `xfail`, or delete a valid test to make an implementation pass.

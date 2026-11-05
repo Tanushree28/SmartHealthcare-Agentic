@@ -1,7 +1,31 @@
 # PLAN.md — Smart Healthcare: Agentic Cardiac AI
 
 Status: **Phase 0 + Phase 1 IMPLEMENTED and verified (2026-08-26).**
-Phases 2–4 remain plan-only and unapproved.
+Phases 1b–1g (baseline, results page, neural classifier, calibration diagnosis,
+ensembles) were added on request and are complete as of 2026-09-17, except
+Phase 1f Stage B. They are not described in this document. See
+[IMPLEMENTATION.md](IMPLEMENTATION.md) and `specs/`.
+Phases 2–4 remain plan-only and unapproved. Phase 2 (MIMIC-III) is next.
+
+**Update 2026-10-14.** Phase 2 (MIMIC-III pipeline) and the Phase 4 shared
+inference + fusion architecture were implemented at the request in
+[`healthcare_ai_implementation_prompt.md`](healthcare_ai_implementation_prompt.md).
+Decisions: [`specs/2026-10-14-mimic-iii-and-multimodal-design.md`](specs/2026-10-14-mimic-iii-and-multimodal-design.md).
+Status: [IMPLEMENTATION.md](IMPLEMENTATION.md), last section. Still blocked:
+the clinical model on full MIMIC-III (credentialing) and fusion training (no
+paired data). Phase 3 (waveform layer) is not started.
+
+**Update 2026-10-31.** Full MIMIC-III is dropped from the plan (no credentialing).
+An open-data plan replaces it: (1) MIT-BIH beats, done; (2) external test on INCART,
+**done 2026-10-31**: the model holds up, macro-F1 0.570 against DS2's 0.555
+([results](../results/2026-10-31-incart-external-test.md)); (3) MIMIC-IV demo +
+MIMIC-IV-ECG and (4) CODE-15%, tentative and not yet designed.
+
+**Paths changed on 2026-10-14.** The project was split into three modules:
+`src/ecg/` became `src/mit_bih/`, and `scripts/`, `tests/` and `notebooks/`
+gained `mit_bih/` subfolders (e.g. `scripts/train_nn.py` is now
+`scripts/mit_bih/train_nn.py`). This document keeps the paths it was written
+with. See the README for the current layout.
 See [IMPLEMENTATION.md](IMPLEMENTATION.md) for what was actually done, the
 deviations from this document, and the real test output.
 

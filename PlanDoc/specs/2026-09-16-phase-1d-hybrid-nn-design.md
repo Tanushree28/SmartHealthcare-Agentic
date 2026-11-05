@@ -1,7 +1,9 @@
 # Phase 1d — Hybrid neural classifier and imbalance study
 
-**Status:** design approved 2026-09-16. Not implemented. No implementation plan
-yet. Not committed.
+**Status:** design approved 2026-09-16. Implemented and run 2026-09-16; merged
+to `master` (PR #1). Results: `results/2026-09-16-nn-ds1_ds2.json`; summary in
+`IMPLEMENTATION.md`, section "Phases 1d–1g". The text below is the design as
+approved and is left unchanged.
 
 **Naming:** `PLAN.md` reserves "Phase 2" for MIMIC-III. This work is numbered
 **1d** so the plan and the repository do not silently disagree. Like Phase 1c, it

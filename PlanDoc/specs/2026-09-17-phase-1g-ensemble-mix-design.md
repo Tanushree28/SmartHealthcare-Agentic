@@ -1,7 +1,9 @@
 # Phase 1g — an ensemble of different losses
 
-**Status:** designed and implemented 2026-09-17. Not yet run. Awaiting a Colab
-GPU session.
+**Status:** designed and implemented 2026-09-17, and run on Colab the same day
+(`results/2026-09-17-ensemble-mix-ds1_ds2.json`). Out-of-fold selection chose
+`D_all_four`: DS2 macro-F1 0.555, macro AP 0.584. `A_focal_only` scored higher
+on DS2 (0.612 / 0.599) but was not selected, per §3.
 
 **Naming:** follows 1d (hybrid network), 1e (repeated CV + ensembling) and 1f
 (calibration diagnosis). `PLAN.md` still reserves Phase 2 for MIMIC-III.

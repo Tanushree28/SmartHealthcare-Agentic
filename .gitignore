@@ -13,6 +13,11 @@ data/
 *.csv.gz
 mitdb/
 mimic*/
+# ...but the MIMIC-III *code* folders share the prefix and must be tracked.
+# They hold source, scripts and synthetic-data tests only; no real data.
+!src/mimic_iii/
+!scripts/mimic_iii/
+!tests/mimic_iii/
 physionet-data/
 
 # ---------------------------------------------------------------
@@ -73,3 +78,7 @@ htmlcov/
 scratch/
 tmp/
 *.log
+
+# Local browser-check output (page snapshots hold patient values) and plan scratch
+.playwright-mcp/
+.superpowers/

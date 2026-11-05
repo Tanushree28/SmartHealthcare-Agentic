@@ -1,0 +1,169 @@
+{
+  "bandpass_high_hz": 40.0,
+  "bandpass_low_hz": 0.5,
+  "bandpass_order": 3,
+  "calibration": "Uncalibrated. Phase 1f measured mean predicted P(S) at 3.2x and P(F) at 14.5x the true class rates. Treat the scores as a ranking of beats, not as probabilities, until Phase 1f Stage B fits a correction.",
+  "classes": [
+    "N",
+    "S",
+    "V",
+    "F",
+    "Q"
+  ],
+  "ensemble": "D_all_four",
+  "fs": 360,
+  "members": [
+    {
+      "arm": "mix_focal",
+      "path": "models/mix_focal_fold0.pt",
+      "phase": "1g",
+      "sha256": "a8880241be022a7f88a4d1e751beeff4f1d5c52d0cd210982359350f6df5d87a"
+    },
+    {
+      "arm": "mix_focal",
+      "path": "models/mix_focal_fold1.pt",
+      "phase": "1g",
+      "sha256": "b4da69dba65cbe67749b873cc7a0e75e839c1eeed863fb32f7e864f8e85f12f9"
+    },
+    {
+      "arm": "mix_focal",
+      "path": "models/mix_focal_fold2.pt",
+      "phase": "1g",
+      "sha256": "eb99021cce9ee287a4f732a0b604dd33746e77ac406095691cddd83c55084a63"
+    },
+    {
+      "arm": "mix_focal",
+      "path": "models/mix_focal_fold3.pt",
+      "phase": "1g",
+      "sha256": "e7ef130042cfe636a9fb12eae5d9a5f2928c2c75cb5bb0861820d9c35c599060"
+    },
+    {
+      "arm": "mix_focal",
+      "path": "models/mix_focal_fold4.pt",
+      "phase": "1g",
+      "sha256": "5005990451f85f003b91bc24a79f572821c3f65ef49e05abf12b308cd8a74704"
+    },
+    {
+      "arm": "mix_plain",
+      "path": "models/mix_plain_fold0.pt",
+      "phase": "1g",
+      "sha256": "206429f68b1a4bd25ae40d45044207385935fc6aa6f8615812ec6c28225d6370"
+    },
+    {
+      "arm": "mix_plain",
+      "path": "models/mix_plain_fold1.pt",
+      "phase": "1g",
+      "sha256": "6fad201860304a713b4dcee1d559675af50521bd2dfeeeb3caa3a6ab32022df0"
+    },
+    {
+      "arm": "mix_plain",
+      "path": "models/mix_plain_fold2.pt",
+      "phase": "1g",
+      "sha256": "561cf3b074e72e729fae6edcb6adb4763a47f11e9164f785f4c7349a454057f1"
+    },
+    {
+      "arm": "mix_plain",
+      "path": "models/mix_plain_fold3.pt",
+      "phase": "1g",
+      "sha256": "74ca4ee49f78362eab565a326614f9b4f6bced8166f7473adbc2d97935aa50e5"
+    },
+    {
+      "arm": "mix_plain",
+      "path": "models/mix_plain_fold4.pt",
+      "phase": "1g",
+      "sha256": "453a497f7e2e2ff2fcd3f177768ce8b66538595ec358524f725beddf263de9f5"
+    },
+    {
+      "arm": "mix_weighted",
+      "path": "models/mix_weighted_fold0.pt",
+      "phase": "1g",
+      "sha256": "d27a49696ada6f89ff0d322506ab5d51dce3ed146fea5aefec99c4c552855f82"
+    },
+    {
+      "arm": "mix_weighted",
+      "path": "models/mix_weighted_fold1.pt",
+      "phase": "1g",
+      "sha256": "d15b06a852f639ec71f623ab7364a79be6470c2780a4d890d6a77c616de62306"
+    },
+    {
+      "arm": "mix_weighted",
+      "path": "models/mix_weighted_fold2.pt",
+      "phase": "1g",
+      "sha256": "7e51b99fafd459b15b148e0b7aef08febddb045da13d5d1dce031618094610b0"
+    },
+    {
+      "arm": "mix_weighted",
+      "path": "models/mix_weighted_fold3.pt",
+      "phase": "1g",
+      "sha256": "9bb7afdbf2a5329b55620387304f675e2a3f5012879c60652f115c60045e6ad0"
+    },
+    {
+      "arm": "mix_weighted",
+      "path": "models/mix_weighted_fold4.pt",
+      "phase": "1g",
+      "sha256": "a0e4cb8275032f44fa9b20bd959fb39d2e4a9daf02dd79cd77d0f484ac8f2cac"
+    },
+    {
+      "arm": "mix_oversample",
+      "path": "models/mix_oversample_fold0.pt",
+      "phase": "1g",
+      "sha256": "cffc272b2217e649a11e8bc8fb0ec1d01d79ea8550432c6b4782f4639bd7bbbf"
+    },
+    {
+      "arm": "mix_oversample",
+      "path": "models/mix_oversample_fold1.pt",
+      "phase": "1g",
+      "sha256": "272c482cef47ba577ed267ebae5e5cd4cd6964dab506ba58d0e80ef28af84d60"
+    },
+    {
+      "arm": "mix_oversample",
+      "path": "models/mix_oversample_fold2.pt",
+      "phase": "1g",
+      "sha256": "6b12b8ba38d774fa7e6e9adc49e2980e40458a66c4d8b7fe40428414e96f0bec"
+    },
+    {
+      "arm": "mix_oversample",
+      "path": "models/mix_oversample_fold3.pt",
+      "phase": "1g",
+      "sha256": "24d02aa4df6e2bce6d9dca08550b7d389f83c11ecf12ca8db12a51c086bf8ab4"
+    },
+    {
+      "arm": "mix_oversample",
+      "path": "models/mix_oversample_fold4.pt",
+      "phase": "1g",
+      "sha256": "00d461e96b6bcc2952a3b2e827e1d6b1041e97103795ff920cb4e0efcdf6f5f3"
+    }
+  ],
+  "norm_mean": 0.0072032797339068415,
+  "norm_std": 0.38001057264335986,
+  "normalization_source": {
+    "file": "normalization.json of the DS1/DS2 preprocessing run",
+    "sha256": "995d34e3d11a6dac6d8b2fc6aac288b62b607773dbd7f6f87f5b0b9078d98e91",
+    "train_records": [
+      "101",
+      "106",
+      "108",
+      "109",
+      "114",
+      "115",
+      "116",
+      "118",
+      "119",
+      "122",
+      "124",
+      "201",
+      "203",
+      "207",
+      "208",
+      "209",
+      "220",
+      "230"
+    ]
+  },
+  "notch": false,
+  "rr_robust": false,
+  "samples_after": 200,
+  "samples_before": 100,
+  "trained_on": "MIT-BIH Arrhythmia Database, DS1 records (de Chazal 2004 split)",
+  "version": 1
+}

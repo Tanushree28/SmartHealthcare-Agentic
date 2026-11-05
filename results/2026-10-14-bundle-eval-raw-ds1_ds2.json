@@ -1,0 +1,147 @@
+{
+  "beats_from": "raw WFDB via mit_bih.inference",
+  "calibration": "Uncalibrated. Phase 1f measured mean predicted P(S) at 3.2x and P(F) at 14.5x the true class rates. Treat the scores as a ranking of beats, not as probabilities, until Phase 1f Stage B fits a correction.",
+  "ensemble": "D_all_four",
+  "headline_macro_f1": 0.5554217266106716,
+  "metrics": {
+    "accuracy": 0.8946,
+    "accuracy_note": "Uninformative on this dataset: normal beats are ~86% of the data, so predicting 'normal' for everything scores ~0.86 while finding no arrhythmias at all. Read per-class recall instead.",
+    "classes": [
+      "N",
+      "S",
+      "V",
+      "F",
+      "Q"
+    ],
+    "confusion_matrix": [
+      [
+        40601,
+        1364,
+        338,
+        1893,
+        0
+      ],
+      [
+        875,
+        777,
+        183,
+        1,
+        0
+      ],
+      [
+        136,
+        45,
+        3034,
+        4,
+        0
+      ],
+      [
+        357,
+        0,
+        29,
+        2,
+        0
+      ],
+      [
+        1,
+        0,
+        6,
+        0,
+        0
+      ]
+    ],
+    "confusion_matrix_note": "rows = true class, columns = predicted class",
+    "label": "D_all_four on DS2",
+    "macro_f1": 0.4443,
+    "macro_f1_headline": 0.5554,
+    "macro_f1_headline_note": "Averaged over N/S/V/F only. Q is excluded: 8 training beats and 7 in DS2 make its F1 noise that would move the ranking. Macro recall alone mis-ranks models -- see results/2026-08-27-baseline-ds1_ds2.md section 3.",
+    "macro_recall": 0.4579,
+    "n_test": 49646,
+    "per_class": [
+      {
+        "class": "N",
+        "f1": 0.9424,
+        "precision": 0.9674,
+        "recall": 0.9187,
+        "support": 44196
+      },
+      {
+        "class": "S",
+        "f1": 0.3864,
+        "precision": 0.3554,
+        "recall": 0.4232,
+        "support": 1836
+      },
+      {
+        "class": "V",
+        "f1": 0.8912,
+        "precision": 0.8451,
+        "recall": 0.9425,
+        "support": 3219
+      },
+      {
+        "class": "F",
+        "f1": 0.0017,
+        "precision": 0.0011,
+        "recall": 0.0052,
+        "support": 388
+      },
+      {
+        "class": "Q",
+        "f1": 0.0,
+        "precision": 0.0,
+        "recall": 0.0,
+        "support": 7
+      }
+    ]
+  },
+  "n_beats": 49646,
+  "n_models": 20,
+  "provenance": {
+    "environment": {
+      "numpy": "2.3.3",
+      "pandas": "2.3.3",
+      "python": "3.13.9",
+      "scipy": "1.16.2",
+      "sklearn": "1.7.2",
+      "torch": "2.14.0"
+    },
+    "generated_utc": "2026-10-15T04:18:05+00:00",
+    "git": {
+      "commit": "156d81ac29cdde9a876e414b0ba7c1888b68bd31",
+      "dirty": true
+    },
+    "inputs": {
+      "bundle": {
+        "path": "/Users/tanushreenepal/Desktop/Smart Healthcare/models/mit_bih_inference_bundle.json",
+        "sha256": "e075f07ace04056e1533fe327dff4a38f0bce85e783b3eab88358bd507e59fa2"
+      }
+    }
+  },
+  "published_headline_macro_f1": 0.5554,
+  "records": [
+    "100",
+    "103",
+    "105",
+    "111",
+    "113",
+    "117",
+    "121",
+    "123",
+    "200",
+    "202",
+    "210",
+    "212",
+    "213",
+    "214",
+    "219",
+    "221",
+    "222",
+    "228",
+    "231",
+    "232",
+    "233",
+    "234"
+  ],
+  "seconds": 563.8
+}
